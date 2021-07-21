@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Tenet - Hackthebox "
+title:  "Tenet - [HTB]"
 date:   2021-06-12 5:35:00 +0200
 last_modified_at: 2021-06-12 5:35:00 +0200
 toc:  true
