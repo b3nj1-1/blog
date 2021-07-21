@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Honeypot - Docker"
+title:  "Honeypot"
 date:   2021-06-16 08:04:29 +0200
 last_modified_at: 2021-06-16 08:05:29 +0200
 toc:  true
