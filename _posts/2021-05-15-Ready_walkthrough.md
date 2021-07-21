@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Ready | HacktheBox 👨‍💻" 
+title:  "Ready - HacktheBox " 
 date:   2021-05-15 3:33:00 +0200
 last_modified_at: 2021-05-15 03:33:29 +0200
 toc:  true
