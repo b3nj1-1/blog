@@ -5,6 +5,7 @@ date:   2021-07-2 6:20:00 +0200
 last_modified_at: 2021-07-2 07:21:29 +0200
 toc:  true
 tags: [suricata, ids/ips, utilidades, docker, blueteam]
+categories: Utilidades
 ---
 
 {: .message}
