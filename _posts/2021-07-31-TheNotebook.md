@@ -136,6 +136,8 @@ Para hacerlo tienes que copiar  la clave publica y la privada en https://jwt.io/
 Aqui tengo acceso a subir un archivo php y entonces aprovechando esto, subiendo el clasico php
 
 ![](/images_blog/img_thenotebook/Pastedimage20210422142431.png)
+![Pastedimage20210422142431](https://user-images.githubusercontent.com/76759292/127757445-cabf92e0-48fd-475b-833f-d69f2afa637a.png)
+
 
 ```bash
 rlwrap nc -lnvp 4444           
@@ -192,6 +194,8 @@ Docker version 18.06.0-ce, build 0ffa825
 Aqui les dejo este [CVE](https://github.com/Frichetten/CVE-2019-5736-PoC):
 
 ![](/images_blog/img_thenotebook/Pastedimage20210731171252.png)
+![Pastedimage20210731171252](https://user-images.githubusercontent.com/76759292/127757457-ae1380af-2ede-4b74-a348-9a65d799c412.png)
+
 
 La idea es que podemos ejecutar cualquier comando como root entonces sabiendo esto le dare permiso a la bash para cuando haga un bash -p me de una bash como root:
 
@@ -200,8 +204,12 @@ ls -la /bin/bash
 -rwxr-xr-x 1 root root 1113504 Jun  6  2019 /bin/bash
 ```
 ![](/images_blog/img_thenotebook/Pastedimage20210731171606.png)
+![Pastedimage20210731171606](https://user-images.githubusercontent.com/76759292/127757460-f66c999b-0eae-44c0-9150-cf0acbe8a097.png)
+
 
 ![](/images_blog/img_thenotebook/Pastedimage20210731171815.png)
+
+![Pastedimage20210731171815](https://user-images.githubusercontent.com/76759292/127757461-a85dc410-c881-4325-82fc-59a60ffe4a8f.png)
 
 Aqui vemos como tenemos acceso a la flag:
 ```bash
