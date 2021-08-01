@@ -61,12 +61,16 @@ Target: http://10.10.10.223/
 
 ### Tenet Wordpress
 ![](/images_blog/img_tenet/Pastedimage20210502200252.png)
+![Pastedimage20210502200252](https://user-images.githubusercontent.com/76759292/127757805-5d1395c6-eae9-4dfd-85c1-0e482dd3f039.png)
+
 
 Subdominio:
 * sator.tenet.htb
 
 ### Tenet.htb
 ![](/images_blog/img_tenet/Pastedimage20210502180600.png)
+![Pastedimage20210502180600](https://user-images.githubusercontent.com/76759292/127757807-1ab06b16-8ec1-477a-b3e2-258c8507d8ad.png)
+
 
 ## Off topic
 * /xmlrpc.php
