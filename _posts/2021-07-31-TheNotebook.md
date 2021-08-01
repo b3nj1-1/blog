@@ -15,9 +15,11 @@ Es una máquina que realmente me gusto por la forma de intrusión y la escalada.
 
 ## Enumeración
 ### Nmap 
+
 *Puertos:*
 * 22 /tcp -> OpenSSH 7.6p1
 * 80 /tcp -> nginx 1.14.0
+
 ```bash
 nmap -p- --open -T5 -v 10.10.10.230 -oG Allport1
 Starting Nmap 7.91 ( https://nmap.org ) at 2021-04-21 21:10 EDT
