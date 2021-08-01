@@ -11,6 +11,8 @@ categories: Hackthebox
 {: .message}
 
 ![](/images_blog/img_ready/Pastedimage20210515121042.png)
+![Pastedimage20210515121042](https://user-images.githubusercontent.com/76759292/127757666-ad49fc55-99bf-4aed-88c5-bb3b4e438220.png)
+
 
 En esta oportunidad se abuso de un CVE que esta presente en una version de Gitlab.
 
@@ -149,10 +151,14 @@ Cuando tenemos el acceso inicial nos damos cuenta que estamos en un docker enton
 En la ruta /opt/backups/gitlab.rb encontraremos un backup con la contraseña root del contenedor
 
 ![](/images_blog/img_ready/Pastedimage20210503175440.png)
+![Pastedimage20210503175440](https://user-images.githubusercontent.com/76759292/127757672-c36da576-b3ef-42dc-8974-70bdc4f1a91f.png)
+
 
 Estas contraseña que hemos encontrado en el backup, la utilizaremos para acceder como un usuario root del contenedor. Al estar dentro de un contenedor estamos muy limitados entonces la idea seria nos montamos la partición del hosts en una carpeta que creemos en /tmp para poder visualizarlo y de esta manera podemos acceder a /root y leer todo lo que tiene.
 
 ![](/images_blog/img_ready/Pastedimage20210503175936.png)
+![Pastedimage20210503175936](https://user-images.githubusercontent.com/76759292/127757675-8e9f154d-1c64-4ee3-ae07-fc3d113848f8.png)
+
 
 En este caso vimos como se puede desde un contenedor visualizar el sistema de archivo del host. Esta maquina fue una excelente manera de ver que pasa cuando no nos mantenemos actualizados.
 
