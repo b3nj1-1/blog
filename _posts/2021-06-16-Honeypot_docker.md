@@ -16,6 +16,7 @@ Mientras buscaba sobre honeypot di con este tema que es honeypot en docker me pa
 
 Esta instalación se llevo acabo en un:
 ![](/images_blog/img_honeypot/Pastedimage20210616165257.png)
+![Pastedimage20210616165257](https://user-images.githubusercontent.com/76759292/127757859-f8dec979-4a62-44a7-8e3d-9b96fac7a59e.png)
 
 
 Buscando honeypot en docker di con uno que es cowrie este tiene una instalación normal y una con docker  cabe destacar que la instalacion normal de cowrie se tiene que da lo que es una redireccion con iptables (Esto si queremos que sea creible) en este caso docker se puede decir que te ahorra esa parte.
@@ -35,6 +36,7 @@ Como corre el honeypot:
 
 Le estamos indicando que el puerto 2222 del contenedor sea el 22 de nuestro servidor: 
 ![](/images_blog/img_honeypot/Pastedimage20210616183231.png)
+![Pastedimage20210616183231](https://user-images.githubusercontent.com/76759292/127757867-fb546971-3f50-4bbf-85b4-337b07ba3980.png)
 
 
 Con la opcion -d le indicamos que corra en background. (El motivo es para que no salga tanto ruido)
@@ -82,6 +84,8 @@ Entra al contededor y en ```/var/log/cowrie/cowrie.json``` estan los logs.
 (Para entrar al contenedor es ```docker exec -it <ID> bash```)
 
 ![](/images_blog/img_honeypot/Pastedimage20210616190736.png)
+![Pastedimage20210616190736](https://user-images.githubusercontent.com/76759292/127757871-f5e5eeef-d9e5-4809-96ee-fa6df42a190d.png)
+
 
 ## Opinión
 
