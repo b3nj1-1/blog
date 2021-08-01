@@ -125,6 +125,8 @@ Primero se copia los dos base64 que se obtuvieron de la codificacion de las cade
 
 ![](/images_blog/img_thenotebook/Pastedimage20210422141532.png)
 
+![Pastedimage20210422141532](https://user-images.githubusercontent.com/76759292/127757368-0953690d-dca7-4a53-95e4-ca1a1caea03f.png)
+
 ### Firma del token 
 
 Para hacerlo tienes que copiar  la clave publica y la privada en https://jwt.io/.
