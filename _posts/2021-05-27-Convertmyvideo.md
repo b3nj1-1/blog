@@ -68,6 +68,8 @@ Nmap done: 1 IP address (1 host up) scanned in 14.92 seconds
 Luego de fuzzear di con un directorio que es admin:
 
 ![](/images_blog/img_convertmyvideo/Pastedimage20210416201737.png)
+![Pastedimage20210416201737](https://user-images.githubusercontent.com/76759292/127757710-64e265d5-b99f-4397-9f32-b29238611ffc.png)
+
 
 ## PoC Inyección de comandos
 
@@ -92,17 +94,23 @@ yt_url=|whoami;
 ```
 
 ![](/images_blog/img_convertmyvideo/Pastedimage20210416210230.png)
+![Pastedimage20210416210230](https://user-images.githubusercontent.com/76759292/127757723-4dc3ddf8-2de9-4564-bee5-97ab61d011b3.png)
+
 
 Podemos tambien visualizar la flag desde aqui (Para el espaciado utilizo Input Field Separators que es una variable de separador de campo de entradas):  
 
 ![](/images_blog/img_convertmyvideo/Pastedimage20210416211813.png)
+![Pastedimage20210416211813](https://user-images.githubusercontent.com/76759292/127757727-fc4e3dd1-fd78-45e3-b4d8-106c00b23e09.png)
 
 Podemos visualizar el contenido que tiene admin:
 ![](/images_blog/img_convertmyvideo/Pastedimage20210416211957.png)
+![Pastedimage20210416211957](https://user-images.githubusercontent.com/76759292/127757731-3a285cca-4e6f-474d-89e3-6e62d08a27d2.png)
 
 Algo que llama la atencion es el contenido que tiene .htpasswd
 
 ![](/images_blog/img_convertmyvideo/Pastedimage20210416212308.png)
+![Pastedimage20210416212308](https://user-images.githubusercontent.com/76759292/127757745-e60616cb-5985-48c0-b63c-f9c6d51b228a.png)
+
 
 ```
 "output":"itsmeadmin:$apr1$tbcm2uwv$UP1ylvgp4.zLKxWj8mc6y\/\n"
@@ -153,6 +161,7 @@ yt_url=|bash${IFS}rev.sh;
 
 
 ![](/images_blog/img_convertmyvideo/Pastedimage20210416213538.png)
+![Pastedimage20210416213538](https://user-images.githubusercontent.com/76759292/127757751-7f9e8d86-b68b-47a8-8ddd-3a204c9e9554.png)
 
 
 ```sql
@@ -177,10 +186,14 @@ itsmeadmin:$apr1$tbcm2uwv$UP1ylvgp4.zLKxWj8mc6y/
 Un script interesante es clean.sh, la idea es basicamente agregar una reverse y esperar que sea ejecutada:
 
 ![](/images_blog/img_convertmyvideo/Pastedimage20210521174646.png)
+![Pastedimage20210521174646](https://user-images.githubusercontent.com/76759292/127757755-383cfbca-aa66-43e0-a23b-57a135cc6f93.png)
+
 
 En esta imagen se confirma mi teoria que basicamente consiste en que ese script es ejecutado por root mediante una tarea cron:
 
 ![](/images_blog/img_convertmyvideo/Pastedimage20210521174719.png)
+![Pastedimage20210521174719](https://user-images.githubusercontent.com/76759292/127757762-889d4ecd-dce2-4c25-82d0-63334389a4ac.png)
+
 
 ```bash
 cat root.txt
@@ -196,18 +209,28 @@ Esto no va con la resolución de la maquina pero me parece interesante el tema d
 
 Primero nos generamos un par de llaves con ssh-keygen:
 ![](/images_blog/img_convertmyvideo/Pastedimage20210521180334.png)
+![Pastedimage20210521180334](https://user-images.githubusercontent.com/76759292/127757767-6490e00f-bc47-4c89-a208-7a4badd90d52.png)
+
 
 Agregamos nuestra llave al authorized_keys:
 ![](/images_blog/img_convertmyvideo/Pastedimage20210521180445.png)
+![Pastedimage20210521180445](https://user-images.githubusercontent.com/76759292/127757768-6ceedccb-bf53-4e71-bcb9-77b6513f795c.png)
+
 
 Probamos que todo este correcto:
 ![](/images_blog/img_convertmyvideo/Pastedimage20210521180621.png)
+![Pastedimage20210521180621](https://user-images.githubusercontent.com/76759292/127757769-49ef382b-cbd0-403f-b77b-e34d1beb161c.png)
+
 
 Con el siguiente comando le estamos diciendo que queremos que el puerto 80 de la maquina victima sea reflejado en el 8084 de nuestra maquina:
 ![](/images_blog/img_convertmyvideo/Pastedimage20210521181139.png)
+![Pastedimage20210521181139](https://user-images.githubusercontent.com/76759292/127757771-a48a1471-51f3-4c4c-88bc-9d0e4e66cfbc.png)
+
 
 Asi lo podriamos visualizar:
 ![](/images_blog/img_convertmyvideo/Pastedimage20210521181155.png)
+![Pastedimage20210521181155](https://user-images.githubusercontent.com/76759292/127757779-2cb3c5c9-5c6f-4230-95ee-3e66f5b4249d.png)
+
 
 En esta maquina pudimos explotar una inyección de comando y posteriormente abusar de una tarea cron.
 
