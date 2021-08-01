@@ -185,4 +185,4 @@ while true; do echo "ssh-rsa XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
 Conjuntamente ejecutamos el script varias veces y listo.
 
-MACHINE PWNED!!!!!
+MACHINE PWNED!!!!
