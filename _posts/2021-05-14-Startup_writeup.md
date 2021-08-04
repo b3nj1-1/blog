@@ -148,6 +148,7 @@ $debug = 0;
 ```
 
 ![](/images_blog/img_startup/Pastedimage20210517170517.png)
+![Pastedimage20210517170517](https://user-images.githubusercontent.com/76759292/128111109-3fd9331e-4ba6-4c18-b9b0-cd5863d22332.png)
 
 Solo nos podemos al escucha:
 
