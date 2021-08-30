@@ -9,7 +9,6 @@ categories: Tryhackme
 ---
 
 {: .message }
-## Introducción
 
 Es una maquina linux que nos permite repasar algunos conceptos basicos.
 
