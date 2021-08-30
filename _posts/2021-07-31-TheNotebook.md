@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "TheNotebook - [HTB]"
+title:  "⚠HTB⚠ TheNotebook"
 date:   2021-07-31 9:20:00 +0200
 last_modified_at: 2021-07-31 09:20:29 +0200
 toc:  true
