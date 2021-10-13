@@ -121,3 +121,5 @@ En la parte de los procesos podemos destacar que existen más de cuatros activid
 Resaltar la importancia de las políticas de continuidad de negocio ya que sin estas no se tendría lo que es un buen proceso de gestión de continuidad de negocios, esto debido a que las políticas definen los lineamientos y directrices para la buena gestión de continuidad de negocio.
 
 Finalmente se pudo cumplir el objetivo principal de este ensayo que es entender a fondo lo que es la continuidad de negocio y las partes que la forman, su importancia y demás, del mismo modo se podrá apreciar de manera diferente lo sucedido el 11-S.
+
+![image](https://user-images.githubusercontent.com/76759292/137051592-efeff581-0e90-4c90-a80c-6e3bef332d7f.png)
