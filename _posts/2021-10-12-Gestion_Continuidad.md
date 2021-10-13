@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Ensayo Gestion de Continuidad"
-date:   2021-05-14 7:21:00 +0200
+date:   2021-10-12 9:36:00 +0200
 last_modified_at: 2021-10-12 09:22:29 +0200
 toc:  true
 tags: [Ensayo]
