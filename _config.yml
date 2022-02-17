@@ -3,7 +3,7 @@ title: B3nj1 Bl0g
 description: Home
 url: https://b3nj1.github.io/blog/
 avatar: /avatar1.png
-paginate: 4
+paginate: 5
 permalink: pretty
 cover_image: /bg.jpg
 
@@ -35,7 +35,7 @@ logo: logo.png
 social:
   name: B3nj1
   links:
-    - https://twitter.com/bruttesei
+    - https://twitter.com/b3nj1_1
     - https://github.com/b3nj1-1
     - https://www.hackthebox.eu/home/users/profile/257310
 google_site_verification: Z2mbzGGnBZ6hxdSBFpRcnTWTMCBcSUdbnrLc6G_6Xyg
