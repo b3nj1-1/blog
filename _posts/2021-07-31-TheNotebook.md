@@ -225,6 +225,6 @@ bash-4.4#
 MACHINE PWNED!!!!!
 
 <p align="center">
-<img src="https://tenor.com/view/typing-petty-fast-cloudy-with-a-chance-of-meatballs-flint-lockwood-gif-4907824.gif" width="200" height="200" />
+<img src="https://tenor.com/view/typing-petty-fast-cloudy-with-a-chance-of-meatballs-flint-lockwood-gif-4907824.gif" width="300" height="300" />
 </p>
 
