@@ -1,51 +1,53 @@
 ---
 layout: post
-title:  "Honeypot en Docker"
+title:  "Honeypot"
 date:   2021-06-16 08:04:29 +0200
 last_modified_at: 2021-06-16 08:05:29 +0200
 toc:  true
-tags: [cowrie, honeypot, Ubuntu, blueteam, review, Docker, Devops]
-categories: Utilidades
+tags: [cowrie, honeypot, Ubuntu, blueteam, Docker]
+categories: Utility
 ---
 
-{: .message}
+With a honeypot we can collect many indicators that we can use later on
 
-##  Honeypot en Docker 
+---
 
-Mientras buscaba sobre honeypot di con este tema que es honeypot en docker me parecio interesante porque nos ahorra muchas cosas en tema de configuración:
+##  Honeypot in Docker 
 
-Esta instalación se llevo acabo en un:
+While I was searching about honeypot I found this topic that is honeypot in docker I found it interesting because it saves us a lot of things in terms of configuration:
+
+This installation was carried out in a:
 ![](/images_blog/img_honeypot/Pastedimage20210616165257.png)
 ![Pastedimage20210616165257](https://user-images.githubusercontent.com/76759292/127757859-f8dec979-4a62-44a7-8e3d-9b96fac7a59e.png)
 
 
-Buscando honeypot en docker di con uno que es cowrie este tiene una instalación normal y una con docker  cabe destacar que la instalacion normal de cowrie se tiene que da lo que es una redireccion con iptables (Esto si queremos que sea creible) en este caso docker se puede decir que te ahorra esa parte.
+Looking for honeypot in docker I found one that is cowrie this has a normal installation and one with docker it is worth noting that the normal installation of cowrie has to give what is a redirection with iptables (This if we want it to be credible) in this case docker can be said that saves you that part.
 
 ### Cowrie
 
-Para instalar cowrie no necesitas tener un gran conociemiento en docker,  aqui te dejo como instalarlo:
+To install cowrie you don't need to have a great knowledge in docker, here is how to install it:
 
 [Docker Installation](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-20-04)
 
 
-Como corre el honeypot:
+How the honeypot runs:
 
 ```bash
  docker run -d -p 22:2222 cowrie/cowrie
 ```
 
-Le estamos indicando que el puerto 2222 del contenedor sea el 22 de nuestro servidor: 
+We are indicating that port 2222 of the container is port 22 of our server:  
 ![](/images_blog/img_honeypot/Pastedimage20210616183231.png)
 ![Pastedimage20210616183231](https://user-images.githubusercontent.com/76759292/127757867-fb546971-3f50-4bbf-85b4-337b07ba3980.png)
 
 
-Con la opcion -d le indicamos que corra en background. (El motivo es para que no salga tanto ruido)
+With the -d option we tell it to run in background. (The reason is so that it does not come out so much noise)
 
-### Prueba
+### Test
 
-Desde otra maquina le lanzo un nmap para ver como responde:
+From another machine I run an nmap to see how it responds:
 
-Antes:
+Before:
 ```bash
 nmap -sV -sC -p22 192.168.204.136
 Starting Nmap 7.91 ( https://nmap.org ) at 2021-06-16 18:07 EDT
@@ -59,7 +61,7 @@ Service detection performed. Please report any incorrect results at https://nmap
 Nmap done: 1 IP address (1 host up) scanned in 0.58 seconds
 ```
 
-Despues:
+after:
 ```bash
 nmap -sV -sC -p22 192.168.204.136
 Starting Nmap 7.91 ( https://nmap.org ) at 2021-06-16 18:11 EDT
@@ -78,22 +80,24 @@ Nmap done: 1 IP address (1 host up) scanned in 0.92 seconds
 ```
 
 
-Para ver los logs que eso seria la parte mas interesante se hace de la siguiente forma:
+To view the logs, which would be the most interesting part, it is done in the following way:
 
-Entra al contededor y en ```/var/log/cowrie/cowrie.json``` estan los logs.
-(Para entrar al contenedor es ```docker exec -it <ID> bash```)
+Enter the container and in ```/var/var/log/cowrie/cowrie.json``` are the logs.
+(To enter the container it is ```docker exec -it <ID> bash```)
 
 ![](/images_blog/img_honeypot/Pastedimage20210616190736.png)
 ![Pastedimage20210616190736](https://user-images.githubusercontent.com/76759292/127757871-f5e5eeef-d9e5-4809-96ee-fa6df42a190d.png)
 
 
-## Opinión
+## Opinion
 
-Me parece una buena opcion a tener en cuenta si queremos dar un poco mas de seguridad a nuestro servidor, cabe destacar que para que funcione se debe tocar otras configuraciones que puede ser que lo toque en otro articulo, la implementación me parecio relativamente sencilla y la forma de ver los logs por igual.
+It seems to me a good option to consider if we want to give a little more security to our server, it should be noted that to make it work you must touch other settings that may be that I touch it in another article, the implementation seemed relatively simple and the way to see the logs alike.
 
-En conclusion me parece una opcion interesante a probar. Puede ser que tambien haga otros articulos sobre honeypot.
+In conclusion it seems to me an interesting option to try. I may also do other articles on honeypot.
 
-
+<p align="center">
+<img src="https://tenor.com/view/honeypot-yum-gif-19589195.gif" width="250" height="250" />
+</p>
 
 
 
