@@ -199,5 +199,5 @@ Review PWNED!!!!!
 
 
 <p align="center">
-<img src="https://tenor.com/view/timone-lion-king-hula-dance-gif-5602013.gif" width="200" height="300" />
+<img src="https://tenor.com/view/timone-lion-king-hula-dance-gif-5602013.gif" width="400" height="400" />
 </p>
