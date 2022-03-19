@@ -124,4 +124,6 @@ To highlight the importance of the business continuity policies, since without t
 
 Finally, the main objective of this essay was achieved, which is to understand in depth what is business continuity and the parts that form it, its importance and others, in the same way it will be possible to appreciate differently what happened on 9/11.
 
-![image](https://user-images.githubusercontent.com/76759292/137051592-efeff581-0e90-4c90-a80c-6e3bef332d7f.png)
+<p align="center">
+<img src="https://tenor.com/view/trump-macron-macron-trump-emmanuel-macron-donald-trump-gif-12954394.gif" width="350" height="300" />
+</p
