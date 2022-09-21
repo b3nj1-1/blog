@@ -82,13 +82,13 @@ Lets go to start:
 Install-WindowsFeature AD-Domain-Services –IncludeManagementTools -Verbose
 ```
 
+![install_feature](https://user-images.githubusercontent.com/76759292/191386174-82ebd5cf-3515-4ee9-ae93-4267ab3b1534.png)
 
-![[install_feature.png]]
 Verify if the installation is sucess:
 
 `Get-WindowsFeature -Name *AD*`
 
-![[feature.png]]
+![feature](https://user-images.githubusercontent.com/76759292/191386234-d083a769-129e-4dbe-99d1-ac3ac217fc9f.png)
 
 After completing the above steps going to deploy the domain:
 
@@ -122,9 +122,10 @@ lDns:$true
 
 I've provided the link above in case you're interested in learning more about why it requests a password:
 
-![[install_addforest.png]]
+![install_addforest](https://user-images.githubusercontent.com/76759292/191386272-f675f3ac-724e-4407-9d6e-c7b5fdeb7968.png)
 
-![[installation.png]]
+![installation](https://user-images.githubusercontent.com/76759292/191386296-31db6112-7862-45f3-afab-0be8ff8ebdea.png)
+
 
 # Verify
 
@@ -157,8 +158,7 @@ Running  Netlogon           Netlogon
 ```
 
 Add machine:
-
-![[access.png]]
+![access](https://user-images.githubusercontent.com/76759292/191386317-1f23364d-bb60-45f8-a337-4cb282d3d5f6.png)
 
 # Remote management
 
@@ -171,13 +171,12 @@ Add-WindowsCapability –online –Name “Rsat.ActiveDirectory.DS-LDS.Tools~~~~
 
 Go to the user and computer active directory once this section is complete, or the best option is to go to mmc.exe and add complement:
 
-
-![[mmc.png]]
+![mmc](https://user-images.githubusercontent.com/76759292/191386349-915ef1db-bb6b-49c6-8bee-3e52db1a92da.png)
 
 
 The user and computer active directory is another option for directly connecting to the Domain Controller:
 
-![[user_computers.png]]
+![user_computers](https://user-images.githubusercontent.com/76759292/191386365-e413d1bb-08cf-49ce-98cb-817b68e24cc7.png)
 
 
 # Advantage
@@ -187,10 +186,12 @@ The user and computer active directory is another option for directly connecting
 If we look at it we realize that in consumption we really notice a change:
 
 ## Windows Server Core
+![process_monitor](https://user-images.githubusercontent.com/76759292/191386400-e78b0f25-75b0-4f9a-a8be-9ec956ca8bf8.png)
 
-![[process_monitor.png]]
 ## Windows Server GUI
-![[process2.png]]
+
+![process2](https://user-images.githubusercontent.com/76759292/191386417-c8900916-4e9e-492d-acdd-25ac0035da34.png)
+
 
 # Disadvantage
 
