@@ -7,9 +7,10 @@ Cybersecurity enthusiast, open source lover and ctf addict. Student of networks 
 * CCNA R&S: Routing and Switching Essentials
 * CCNA R&S: Scaling Networks 
 * IT Essentials 
+* Comptia Security+ 
 
 ## Social Media
 
 * [HackTheBox](https://www.hackthebox.eu/home/users/profile/257310)
 * [Github ](https://github.com/b3nj1-1/)
-* [Twitter](https://twitter.com/bruttesei)
+* [Twitter](https://twitter.com/b3nj1_1)
