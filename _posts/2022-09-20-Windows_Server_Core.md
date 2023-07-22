@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "How to install Windows Server Core"
+title:  "Windows Server Core I"
 date:   2022-09-20 20:05:29 -0400
 last_modified_at: 2022-09-20 20:05:29 -0400
 toc:  true
