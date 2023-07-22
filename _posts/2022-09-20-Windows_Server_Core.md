@@ -8,7 +8,7 @@ tags: [windows, sysadmin]
 categories: Sysadmin
 ---
 
-Windows Server Core
+Installing Windows Server Core
 
 ---
 
