@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Business Continuity Management (BCM)"
+title:  "Business Continuity Management"
 date:   2021-10-12 9:36:00 +0200
 last_modified_at: 2021-10-12 09:22:29 +0200
 toc:  true
