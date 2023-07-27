@@ -13,6 +13,7 @@ I'm a cybersecurity and networking professional with a particular interest in of
 * CompTIA Security+
 * Certified Azure Red Team Professional (CARTP)
 * Certified Red Team Operator (CRTO)
+* Certified Mobile Pentester (CMPen)
 * Mobile Application Penetration Testing
 * Practical Malware Analysis & Triage
 
