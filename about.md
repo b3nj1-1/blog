@@ -1,4 +1,5 @@
 ---
+layout: archive-taxonomies
 layout: page
 title: 👨‍💻 About 👨‍💻
 ---
