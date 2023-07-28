@@ -9,6 +9,7 @@ categories: Tryhackme
 ---
 
 It is an interesting windows machine in the initial part and in the climbing that can present a challenge.
+
 ---
 
 ## Enumeration
