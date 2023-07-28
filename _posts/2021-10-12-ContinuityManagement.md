@@ -5,7 +5,7 @@ date:   2021-10-12 9:36:00 +0200
 last_modified_at: 2021-10-12 09:22:29 +0200
 toc:  true
 tags: [Writing]
-categories: Writing
+categories: BCM
 ---
 
 This is my point of view on what I understand by continuity
