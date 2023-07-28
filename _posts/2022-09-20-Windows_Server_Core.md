@@ -5,7 +5,7 @@ date:   2022-09-20 20:05:29 -0400
 last_modified_at: 2022-09-20 20:05:29 -0400
 toc:  true
 tags: [windows, sysadmin]
-categories: Sysadmin
+categories: Windows
 ---
 
 Installing Windows Server Core
