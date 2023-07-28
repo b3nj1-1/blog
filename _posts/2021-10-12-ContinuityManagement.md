@@ -126,4 +126,4 @@ Finally, the main objective of this essay was achieved, which is to understand i
 
 <p align="center">
 <img src="https://tenor.com/view/trump-macron-macron-trump-emmanuel-macron-donald-trump-gif-12954394.gif" width="350" height="300" />
-</p
+</p>
