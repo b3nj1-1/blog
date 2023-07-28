@@ -5,7 +5,7 @@ date:   2021-06-16 08:04:29 +0200
 last_modified_at: 2021-06-16 08:05:29 +0200
 toc:  true
 tags: [cowrie, honeypot, Ubuntu, blueteam, Docker]
-categories: Utility
+categories: Research
 ---
 
 With a honeypot we can collect many indicators that we can use later on
