@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Upgrade Buspirate"
+title:  "Upgrade Bus pirate"
 date:   2023-08-19 02:20:29 +0200
 last_modified_at: 2023-08-19 02:20:29 +0200
 toc:  true
@@ -49,9 +49,6 @@ Writing page 41 row 332, a600...OK
 Writing page 41 row 333, a680...OK
 Writing page 41 row 334, a700...OK
 Writing page 41 row 335, a780...OK
-Erasing page 42, a800...ERROR [50]
-
-Error updating firmware :(
 ```
 
 Now, open tera term and go to Setup --> Serial Port and set up the following configuration:
