@@ -8,8 +8,7 @@ tags: [windows, sysadmin]
 categories: Windows
 ---
 
-Installing Windows Server Core
-
+Advantages and disadvantages of using windows server core
 ---
 
 # Reason
