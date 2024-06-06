@@ -3,7 +3,8 @@ title: B3nj1
 description: Home
 url: https://blog.b3nj1.net/
 avatar: /avatar1.png
-paginate: 3
+paginate: 5
+paginate_path: "/page:num/"
 permalink: pretty
 cover_image: /bg.jpg
 
