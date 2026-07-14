@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cowrie — b3nj1</title>
+<link rel="stylesheet" href="../style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark-dimmed.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+</head>
+<body>
+<nav>
+  <a href="../index.html" class="logo">b3nj1</a>
+  <div class="links">
+    <a href="../index.html">index</a>
+    <a href="../about.html">about</a>
+    <a href="../research/index.html">research</a>
+    <button class="switch-btn" id="dmBtn" onclick="toggleDM()">light</button>
+    <button class="switch-btn" onclick="switchTheme()">layout</button>
+  </div>
+</nav>
+
+<article>
+  <h1>Cowrie</h1>
+  <div class="meta">Jun 16, 2021 / Research</div>
+  <div class="body">
+    <p>With a honeypot we can collect many indicators that we can use later on</p>
+<hr>
+<h2>Honeypot in Docker</h2>
+<p>While I was searching about honeypot I found this topic that is honeypot in docker I found it interesting because it saves us a lot of things in terms of configuration:</p>
+<p>This installation was carried out in a:<br><img src="/images_blog/img_honeypot/Pastedimage20210616165257.png" alt=""><br><img src="https://user-images.githubusercontent.com/76759292/127757859-f8dec979-4a62-44a7-8e3d-9b96fac7a59e.png" alt="Pastedimage20210616165257"></p>
+<p>Looking for honeypot in docker I found one that is cowrie this has a normal installation and one with docker it is worth noting that the normal installation of cowrie has to give what is a redirection with iptables (This if we want it to be credible) in this case docker can be said that saves you that part.</p>
+<h3>Cowrie</h3>
+<p>To install cowrie you don&#39;t need to have a great knowledge in docker, here is how to install it:</p>
+<p><a href="https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-20-04">Docker Installation</a></p>
+<p>How the honeypot runs:</p>
+<pre><code class="language-bash"> docker run -d -p 22:2222 cowrie/cowrie
+</code></pre>
+<p>We are indicating that port 2222 of the container is port 22 of our server:<br><img src="/images_blog/img_honeypot/Pastedimage20210616183231.png" alt=""><br><img src="https://user-images.githubusercontent.com/76759292/127757867-fb546971-3f50-4bbf-85b4-337b07ba3980.png" alt="Pastedimage20210616183231"></p>
+<p>With the -d option we tell it to run in background. (The reason is so that it does not come out so much noise)</p>
+<h3>Test</h3>
+<p>From another machine I run an nmap to see how it responds:</p>
+<p>Before:</p>
+<pre><code class="language-bash">nmap -sV -sC -p22 192.168.204.136
+Starting Nmap 7.91 ( https://nmap.org ) at 2021-06-16 18:07 EDT
+Nmap scan report for 192.168.204.136
+Host is up (0.00044s latency).
+
+PORT   STATE  SERVICE VERSION
+22/tcp closed ssh
+
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 0.58 seconds
+</code></pre>
+<p>after:</p>
+<pre><code class="language-bash">nmap -sV -sC -p22 192.168.204.136
+Starting Nmap 7.91 ( https://nmap.org ) at 2021-06-16 18:11 EDT
+Nmap scan report for 192.168.204.136
+Host is up (0.00047s latency).
+
+PORT   STATE SERVICE VERSION
+22/tcp open  ssh     OpenSSH 6.0p1 Debian 4+deb7u2 (protocol 2.0)
+| ssh-hostkey: 
+|   1024 e9:7a:90:03:07:17:e3:29:06:1c:0d:89:aa:49:ad:a4 (DSA)
+|_  2048 0a:4c:ef:bb:a3:b2:68:fb:0f:2b:c2:14:12:ed:98:66 (RSA)
+Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 0.92 seconds
+</code></pre>
+<p>To view the logs, which would be the most interesting part, it is done in the following way:</p>
+<p>Enter the container and in <code>/var/var/log/cowrie/cowrie.json</code> are the logs.<br>(To enter the container it is <code>docker exec -it &lt;ID&gt; bash</code>)</p>
+<p><img src="/images_blog/img_honeypot/Pastedimage20210616190736.png" alt=""><br><img src="https://user-images.githubusercontent.com/76759292/127757871-f5e5eeef-d9e5-4809-96ee-fa6df42a190d.png" alt="Pastedimage20210616190736"></p>
+<h2>Opinion</h2>
+<p>It seems to me a good option to consider if we want to give a little more security to our server, it should be noted that to make it work you must touch other settings that may be that I touch it in another article, the implementation seemed relatively simple and the way to see the logs alike.</p>
+<p>In conclusion it seems to me an interesting option to try. I may also do other articles on honeypot.</p>
+<p align="center">
+<img src="https://tenor.com/view/honeypot-yum-gif-19589195.gif" width="250" height="250" />
+</p>
+  </div>
+  <div class="tags"><span class="tag">cowrie</span>
+<span class="tag">honeypot</span>
+<span class="tag">Ubuntu</span>
+<span class="tag">blueteam</span>
+<span class="tag">Docker</span></div>
+</article>
+<script>
+function switchTheme() { localStorage.setItem('layout','modern'); window.location.href = '../../modern/index.html'; }
+function toggleDM() { var d = document.documentElement; var c = d.getAttribute('data-theme'); var n = (c === 'light') ? 'dark' : 'light'; d.setAttribute('data-theme', n); document.getElementById('dmBtn').textContent = n === 'light' ? 'dark' : 'light'; localStorage.setItem('dm', n); }
+(function(){ var s = localStorage.getItem('dm') || 'dark'; if (s === 'light') { document.documentElement.setAttribute('data-theme','light'); document.getElementById('dmBtn').textContent = 'dark'; } })();
+</script>
+<footer>B3nj1 / 2026</footer>
+</body>
+</html>

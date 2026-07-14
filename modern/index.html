@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Home | b3nj1</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💀</text></svg>">
+  <meta name="description" content="Cybersecurity & networking research, CTF walkthroughs, and mobile pentesting">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark-dimmed.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script>hljs.highlightAll();</script>
+  
+</head>
+<body>
+  <div class="container">
+    <nav>
+      <span class="logo">~&gt; <a href="index.html">b3nj1</a></span>
+      <ul class="nav-links">
+        <li><a href="index.html">Posts</a></li>
+        <li><a href="about/index.html">About</a></li>
+        <li><a href="research/index.html">Research</a></li>
+        <li><a href="https://github.com/b3nj1-1" target="_blank">GitHub</a></li>
+        <li><button class="theme-btn" id="dmBtn" onclick="toggleDM()">light</button></li>
+        <li><button class="theme-btn" onclick="switchTheme()">layout</button></li>
+      </ul>
+    </nav>
+    
+    <section class="hero">
+      <p class="tagline">Cybersecurity & networking research, CTF walkthroughs, and mobile pentesting</p>
+    </section>
+
+    <div class="search-box">
+      <input type="text" id="search" placeholder="Search posts..." />
+    </div>
+
+    <div class="filters">
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="Android">Android</button>
+          <button class="filter-btn" data-filter="BCM">BCM</button>
+          <button class="filter-btn" data-filter="Doubts">Doubts</button>
+          <button class="filter-btn" data-filter="Hackthebox">Hackthebox</button>
+          <button class="filter-btn" data-filter="Hardware">Hardware</button>
+          <button class="filter-btn" data-filter="Mobile Pentesting">Mobile Pentesting</button>
+          <button class="filter-btn" data-filter="Research">Research</button>
+          <button class="filter-btn" data-filter="Scripting">Scripting</button>
+          <button class="filter-btn" data-filter="Tryhackme">Tryhackme</button>
+          <button class="filter-btn" data-filter="Windows">Windows</button>
+          <button class="filter-btn" data-filter="mobile">mobile</button>
+    </div>
+
+    <div class="posts-list" id="posts-list">
+      
+      <a href="posts/food-store-from-mobile-hacking-lab.html" class="post-card">
+        <div class="post-meta">
+          <span class="date">Jun 9, 2025</span>
+          <span class="category">Android</span>
+        </div>
+        <h2>Food Store From Mobile Hacking Lab</h2>
+        <p>This is a challenge that we have to analysis the code, and in the code we will found an SQLi that will led to a SQL injection. This is my own methodology and the way that I approac...</p>
+        <div class="post-tags">
+          <span class="tag">Android</span><span class="tag">SQLi</span>
+        </div>
+      </a>
+
+      <a href="posts/unveiling-the-secrets-of-mobile-penetration-testing-i-drozer.html" class="post-card">
+        <div class="post-meta">
+          <span class="date">Sep 18, 2023</span>
+          <span class="category">mobile</span>
+        </div>
+        <h2>Unveiling the Secrets of Mobile Penetration Testing I (Drozer)</h2>
+        <p>Unveiling the Secrets of Mobile Penetration Testing: Where to Begin</p>
+        <div class="post-tags">
+          <span class="tag">Mobile_pentesting</span>
+        </div>
+      </a>
+
+      <a href="posts/upgrade-bus-pirate.html" class="post-card">
+        <div class="post-meta">
+          <span class="date">Aug 18, 2023</span>
+          <span class="category">Hardware</span>
+        </div>
+        <h2>Upgrade Bus pirate</h2>
+        <p>The Bus Pirate is an open-source hacker multi-tool that talks to electronic stuff. It's got a bunch of features an intrepid hacker might need to prototype their next project. This ...</p>
+        <div class="post-tags">
+          <span class="tag">Hardware</span>
+        </div>
+      </a>
+
+      <a href="posts/windows-server-core-i.html" class="post-card">
+        <div class="post-meta">
+          <span class="date">Sep 20, 2022</span>
+          <span class="category">Windows</span>
+        </div>
+        <h2>Windows Server Core I</h2>
+        <p>Advantages and disadvantages of using windows server core</p>
+        <div class="post-tags">
+          <span class="tag">windows</span><span class="tag">sysadmin</span>
+        </div>
+      </a>
+
+      <a href="posts/hackthebox-paper.html" class="post-card">
+        <div class="post-meta">
+          <span class="date">Jun 30, 2022</span>
+          <span class="category">Hackthebox</span>
+        </div>
+        <h2>HacktheBox - Paper</h2>
+        <p>This machine plays a cve that when the machine was released was discovered.</p>
+        <div class="post-tags">
+          <span class="tag">ctf</span><span class="tag">linux</span><span class="tag">Hackthebox</span><span class="tag">Wordpress</span><span class="tag">polkit</span>
+        </div>
+      </a>
+
+      <a href="posts/mobile-pentesting-i.html" class="post-card">
+        <div class="post-meta">
+          <span class="date">Mar 3, 2022</span>
+          <span class="category">Mobile_Pentesting</span>
+        </div>
+        <h2>Mobile Pentesting I</h2>
+        <p>In this post you will see the different vulnerabilities that android devices can face. (OWASP Mobile Top 10)</p>
+        <div class="post-tags">
+          <span class="tag">mobile  pentesting</span><span class="tag">pentesting</span><span class="tag">android</span>
+        </div>
+      </a>
+
+      <a href="posts/network-drivers-for-wifi-cards.html" class="post-card">
+        <div class="post-meta">
+          <span class="date">Jan 17, 2022</span>
+          <span class="category">Doubts</span>
+        </div>
+        <h2>Network drivers for wifi cards</h2>
+        <p>In my case it gave me a lot of problems and that's why I'm making this post so that if someone finds it difficult to see this. Solution to the installation of network drivers for w...</p>
+        <div class="post-tags">
+          <span class="tag">utility</span><span class="tag">wifi</span>
+        </div>
+      </a>
+
+      <a href="posts/business-continuity-management.html" class="post-card">
+        <div class="post-meta">
+          <span class="date">Oct 12, 2021</span>
+          <span class="category">BCM</span>
+        </div>
+        <h2>Business Continuity Management</h2>
+        <p>This is my point of view on what I understand by continuity</p>
+        <div class="post-tags">
+          <span class="tag">Writing</span>
+        </div>
+      </a>
+
+      <a href="posts/active-directory-i.html" class="post-card">
+        <div class="post-meta">
+          <span class="date">Aug 29, 2021</span>
+          <span class="category">Windows</span>
+        </div>
+        <h2>Active Directory I</h2>
+        <p>In this article I use a basic methodology to breach an Active Directory, this article will be the first of a saga that will be oriented to AD walkthroughs.</p>
+        <div class="post-tags">
+          <span class="tag">Active Directory</span><span class="tag">AS-REP Roast</span><span class="tag">Passthehashm</span><span class="tag">walkthroughs</span>
+        </div>
+      </a>
+
+      <a href="posts/hackthebox-thenotebook.html" class="post-card">
+        <div class="post-meta">
+          <span class="date">Jul 31, 2021</span>
+          <span class="category">Hackthebox</span>
+        </div>
+        <h2>HacktheBox - TheNotebook</h2>
+        <p>It's a machine that I really liked the way it intruded and climbed.</p>
+        <div class="post-tags">
+          <span class="tag">ctf</span><span class="tag">linux</span><span class="tag">Hackthebox</span><span class="tag">Writeup</span><span class="tag">Docker</span><span class="tag">JWT</span>
+        </div>
+      </a>
+
+      <a href="posts/suricata.html" class="post-card">
+        <div class="post-meta">
+          <span class="date">Jul 1, 2021</span>
+          <span class="category">Research</span>
+        </div>
+        <h2>Suricata</h2>
+        <p>Suricata is a scalable tool. This security monitor makes use of multi-threading functions so that just by running in one instance the monitor will balance its load among all availa...</p>
+        <div class="post-tags">
+          <span class="tag">suricata</span><span class="tag">ids/ips</span><span class="tag">Utility</span><span class="tag">docker</span><span class="tag">blueteam</span>
+        </div>
+      </a>
+
+      <a href="posts/cowrie.html" class="post-card">
+        <div class="post-meta">
+          <span class="date">Jun 16, 2021</span>
+          <span class="category">Research</span>
+        </div>
+        <h2>Cowrie</h2>
+        <p>With a honeypot we can collect many indicators that we can use later on</p>
+        <div class="post-tags">
+          <span class="tag">cowrie</span><span class="tag">honeypot</span><span class="tag">Ubuntu</span><span class="tag">blueteam</span><span class="tag">Docker</span>
+        </div>
+      </a>
+
+      <a href="posts/hackthebox-tenet.html" class="post-card">
+        <div class="post-meta">
+          <span class="date">Jun 11, 2021</span>
+          <span class="category">Hackthebox</span>
+        </div>
+        <h2>HacktheBox - Tenet</h2>
+        <p>It is an excellent machine to practice deserialization in PHP.</p>
+        <div class="post-tags">
+          <span class="tag">ctf</span><span class="tag">linux</span><span class="tag">hackthebox</span><span class="tag">Writeup</span><span class="tag">deserializacion</span>
+        </div>
+      </a>
+
+      <a href="posts/tryhackme-convertmyvideo.html" class="post-card">
+        <div class="post-meta">
+          <span class="date">May 26, 2021</span>
+          <span class="category">Tryhackme</span>
+        </div>
+        <h2>TryHackMe - Convertmyvideo</h2>
+        <p>It is a linux machine that allows us to exploit a vulnerability found in the OWASP Top 10 (2017).</p>
+        <div class="post-tags">
+          <span class="tag">ctf</span><span class="tag">linux</span><span class="tag">Tryhackme</span><span class="tag">Writeup</span><span class="tag">cron</span><span class="tag">ssh</span><span class="tag">command_injection</span><span class="tag">bonus</span>
+        </div>
+      </a>
+
+      <a href="posts/hackthebox-ready.html" class="post-card">
+        <div class="post-meta">
+          <span class="date">May 14, 2021</span>
+          <span class="category">Hackthebox</span>
+        </div>
+        <h2>HacktheBox - Ready</h2>
+        <p>This time it is an abuse of a CVE that is present in a version of Gitlab.</p>
+        <div class="post-tags">
+          <span class="tag">ctf</span><span class="tag">linux</span><span class="tag">Hackthebox</span><span class="tag">Walkthrough</span><span class="tag">CVE</span><span class="tag">Gitlab</span><span class="tag">docker</span>
+        </div>
+      </a>
+
+      <a href="posts/tryhackme-startup.html" class="post-card">
+        <div class="post-meta">
+          <span class="date">Jul 12, 2026</span>
+          <span class="category">Tryhackme</span>
+        </div>
+        <h2>TryHackMe - Startup</h2>
+        <p>It is a linux machine that allows us to review some basic concepts.</p>
+        <div class="post-tags">
+          <span class="tag">ctf</span><span class="tag">linux</span><span class="tag">Tryhackme</span><span class="tag">Writeup</span>
+        </div>
+      </a>
+
+      <a href="posts/tryhackme-relevant.html" class="post-card">
+        <div class="post-meta">
+          <span class="date">May 14, 2021</span>
+          <span class="category">Tryhackme</span>
+        </div>
+        <h2>TryHackMe - Relevant</h2>
+        <p>It is an interesting windows machine in the initial part and in the climbing that can present a challenge.</p>
+        <div class="post-tags">
+          <span class="tag">ctf</span><span class="tag">windows</span><span class="tag">Tryhackme</span><span class="tag">Walkthrough</span><span class="tag">SeImpersonatePrivilege</span>
+        </div>
+      </a>
+
+      <a href="posts/sherlogs.html" class="post-card">
+        <div class="post-meta">
+          <span class="date">May 1, 2021</span>
+          <span class="category">Scripting</span>
+        </div>
+        <h2>Sherlogs</h2>
+        <p>It is a simple bash script that seeks to do the task of viewing the logs of a centos server in an easy way, there are many tools to do the same but the idea of this is to serve as ...</p>
+        <div class="post-tags">
+          <span class="tag">Scripting</span>
+        </div>
+      </a>
+    </div>
+
+    <script src="js/main.js"></script>
+    <footer>
+      &copy; 2026 <a href="https://github.com/b3nj1-1">B3nj1</a>. All rights reserved.
+    </footer>
+  </div>
+  
+  <div class="landing-modal" id="landingModal">
+    <div class="landing-box">
+      <h2>choose your view</h2>
+      <p>pick a theme for browsing this site</p>
+      <div class="landing-choices">
+        <button class="landing-card" onclick="pickTheme('modern')">
+          <span class="lc-icon">~&gt;</span>
+          <span class="lc-title">modern</span>
+          <span class="lc-desc">dark · cards · search · filters</span>
+        </button>
+        <button class="landing-card" onclick="pickTheme('minimal')">
+          <span class="lc-icon">>></span>
+          <span class="lc-title">minimal</span>
+          <span class="lc-desc">dark · list · no js · lightweight</span>
+        </button>
+      </div>
+    </div>
+  </div>
+  <script>
+    var lt = localStorage.getItem('layout');
+    if (lt === 'minimal') { window.location.href = '../minimal/index.html'; }
+    else if (!lt) { document.getElementById('landingModal').classList.add('show'); }
+    function pickTheme(v) { localStorage.setItem('layout', v); document.getElementById('landingModal').classList.remove('show'); }
+    function switchTheme() { localStorage.setItem('layout','minimal'); window.location.href = '../minimal/index.html'; }
+    function toggleDM() { var d = document.documentElement; var c = d.getAttribute('data-theme'); var n = (c === 'light') ? 'dark' : 'light'; d.setAttribute('data-theme', n); document.getElementById('dmBtn').textContent = n === 'light' ? 'dark' : 'light'; localStorage.setItem('dm', n); }
+    (function(){ var s = localStorage.getItem('dm') || 'dark'; if (s === 'light') { document.documentElement.setAttribute('data-theme','light'); document.getElementById('dmBtn').textContent = 'dark'; } })();
+  </script>
+</body>
+</html>

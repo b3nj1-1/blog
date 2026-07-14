@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Upgrade Bus pirate | b3nj1</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💀</text></svg>">
+  <meta name="description" content="Cybersecurity & networking research, CTF walkthroughs, and mobile pentesting">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark-dimmed.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script>hljs.highlightAll();</script>
+  <meta property="article:published_time" content="2023-08-19">
+</head>
+<body>
+  <div class="container">
+    <nav>
+      <span class="logo">~&gt; <a href="../index.html">b3nj1</a></span>
+      <ul class="nav-links">
+        <li><a href="../index.html">Posts</a></li>
+        <li><a href="../about/index.html">About</a></li>
+        <li><a href="../research/index.html">Research</a></li>
+        <li><a href="https://github.com/b3nj1-1" target="_blank">GitHub</a></li>
+        <li><button class="theme-btn" id="dmBtn" onclick="toggleDM()">light</button></li>
+        <li><button class="theme-btn" onclick="switchTheme()">layout</button></li>
+      </ul>
+    </nav>
+    
+    <article>
+      <div class="post-header">
+        <a href="../index.html" class="back-link">&larr; Back to all posts</a>
+        <h1>Upgrade Bus pirate</h1>
+        <div class="meta">
+          <time datetime="2023-08-19">Aug 18, 2023</time>
+          <span class="sep">&#x2022;</span>
+          <span class="cat">Hardware</span>
+          <span class="sep">&#x2022;</span>
+          <span>1 tags</span>
+        </div>
+      </div>
+      <div class="post-content">
+        <hr>
+<p>The Bus Pirate is an open-source hacker multi-tool that talks to electronic stuff. It&#39;s got a bunch of features an intrepid hacker might need to prototype their next project. This manual is an effort to link all available Bus Pirate information in one place.</p>
+<p>-<a href="http://dangerousprototypes.com/docs/Bus_Pirate">Dangerous prototypes</a></p>
+<h2>Requeriments</h2>
+<ul>
+<li>Tera Term</li>
+<li>Dupont wire</li>
+<li>Mini USB</li>
+</ul>
+<h2>Upgrade</h2>
+<p>This upgrade was done on a Windows machine. First download <a href="https://github.com/TeraTermProject/osdn-download/releases/tag/teraterm-5.0_beta1">Tera Term</a> Check the device manager to see what serial port the bus pirate is using when the tera term is ready:</p>
+<p><img src="https://github.com/b3nj1-1/blog/assets/76759292/b52f4f92-2030-4c70-a3f5-b362466756c0" alt="image"></p>
+<p>Now this part is important because if you touch other pins you can break the bus pirate, so be careful in this part, connect the PGD and PGC with Dupont wire.</p>
+<p>I used a key instead of a Dupont wire because I forgot it:</p>
+<p><img src="https://github.com/b3nj1-1/blog/assets/76759292/067277eb-7c46-420b-a76b-7969904ec603" alt="IMG_1289"></p>
+<p>When the pins are connected run the following command:</p>
+<pre><code class="language-cmd">pirate-loader.exe --dev=COM? --hex=BPv3-bootloader-upgrade-v4xtov4.5.hex
+</code></pre>
+<p>The output expect is:</p>
+<pre><code class="language-cmd">Writing page 41 row 328, a400...OK
+Writing page 41 row 329, a480...OK
+Writing page 41 row 330, a500...OK
+Writing page 41 row 331, a580...OK
+Writing page 41 row 332, a600...OK
+Writing page 41 row 333, a680...OK
+Writing page 41 row 334, a700...OK
+Writing page 41 row 335, a780...OK
+</code></pre>
+<p>Now, open tera term and go to Setup --&gt; Serial Port and set up the following configuration:</p>
+<p><img src="https://github.com/b3nj1-1/blog/assets/76759292/62a79067-416b-4904-aacb-05ca26e664e1" alt="image"></p>
+<p>Double space to check if it works and do the same process, disconnect the bus pirate, connect PGD and PGC and run the following command:</p>
+<pre><code class="language-cmd">pirate-loader.exe --dev=COM5 --hex=busPirate-JTAG_SAFE_1.hex
+</code></pre>
+<p>Go to tera term and set the serial port:</p>
+<p><img src="https://github.com/b3nj1-1/blog/assets/76759292/8f3d7b23-ba5c-491b-9c77-bf82094e1854" alt="image"></p>
+<p>(i + enter)</p>
+<p><img src="https://github.com/b3nj1-1/blog/assets/76759292/d1e8bd5b-617f-4088-bfe3-3f319634ecbd" alt="image"></p>
+<h2>Test</h2>
+<p>To verify the bus pirate is working, run ~:</p>
+<p><img src="https://github.com/b3nj1-1/blog/assets/76759292/7b1acb5c-9623-46fa-9e36-c3a7411b1843" alt="image"></p>
+<p>IMPORTANT: </p>
+<pre><code>Connect the following pins be careful because if you connect with other pins you break the bus pirate
+</code></pre>
+<p><img src="https://github.com/b3nj1-1/blog/assets/76759292/c4f192c6-a906-40bc-9130-2871cbd021a7" alt="image"></p>
+<p>IMPORTANT:</p>
+<pre><code>if you want to update your bus pirate please follow the official documentation
+</code></pre>
+<p><a href="http://dangerousprototypes.com/docs/Pirate-Loader_console_upgrade_application_(Linux,_Mac,_Windows)">Documentation</a></p>
+<p align="center">
+<img src="https://tenor.com/view/timone-lion-king-hula-dance-gif-5602013.gif" width="400" height="400" />
+</p>
+      </div>
+      <div class="post-footer">
+        <div class="tags">
+          <span class="tag">Hardware</span>
+        </div>
+      </div>
+    </article>
+    <footer>
+      &copy; 2026 <a href="https://github.com/b3nj1-1">B3nj1</a>. All rights reserved.
+    </footer>
+  </div>
+  <script>
+    function switchTheme() { localStorage.setItem('layout','minimal'); window.location.href = '../../minimal/index.html'; }
+    function toggleDM() { var d = document.documentElement; var c = d.getAttribute('data-theme'); var n = (c === 'light') ? 'dark' : 'light'; d.setAttribute('data-theme', n); document.getElementById('dmBtn').textContent = n === 'light' ? 'dark' : 'light'; localStorage.setItem('dm', n); }
+    (function(){ var s = localStorage.getItem('dm') || 'dark'; if (s === 'light') { document.documentElement.setAttribute('data-theme','light'); document.getElementById('dmBtn').textContent = 'dark'; } })();
+  </script>
+</body>
+</html>

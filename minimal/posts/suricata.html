@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Suricata — b3nj1</title>
+<link rel="stylesheet" href="../style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark-dimmed.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+</head>
+<body>
+<nav>
+  <a href="../index.html" class="logo">b3nj1</a>
+  <div class="links">
+    <a href="../index.html">index</a>
+    <a href="../about.html">about</a>
+    <a href="../research/index.html">research</a>
+    <button class="switch-btn" id="dmBtn" onclick="toggleDM()">light</button>
+    <button class="switch-btn" onclick="switchTheme()">layout</button>
+  </div>
+</nav>
+
+<article>
+  <h1>Suricata</h1>
+  <div class="meta">Jul 1, 2021 / Research</div>
+  <div class="body">
+    <p>Suricata is a scalable tool. This security monitor makes use of multi-threading functions so that just by running in one instance the monitor will balance its load among all available processors, even bypassing some of them if we so specify. As a result, this tool is capable of processing a bandwidth of up to 10 gigabits per second with no impact on performance.</p>
+<p>This tool is also capable of identifying the main network protocols, being able to control all the traffic generated in the system at all times and controlling possible malware threats.</p>
+<hr>
+<h2>Requirements</h2>
+<ul>
+<li>nginx</li>
+<li>suricata</li>
+</ul>
+<h2>Installation</h2>
+<p>We first install nginx in docker and expose the port:</p>
+<pre><code class="language-bash">docker pull nginx
+</code></pre>
+<p>Here we see our ip address and the installed application:</p>
+<p><img src="/images_blog/img_suricata/Pastedimage20210626115536.png" alt=""><br><img src="https://user-images.githubusercontent.com/76759292/127757896-48f1a414-5512-468d-83d8-e5167a6adf86.png" alt="Pastedimage20210626115536"></p>
+<p><img src="/images_blog/img_suricata/Pastedimage20210626115650.png" alt=""><br><img src="https://user-images.githubusercontent.com/76759292/127757901-529182f0-a6fd-4b62-928d-f160eeb7af82.png" alt="Pastedimage20210626115650"></p>
+<h2>Install suricata</h2>
+<p>This we will do if we want to execute it in a basic and fast way, with the parameter <code>-i</code> we specify the network card of the server.<br>(For the log part we could also add volumes).</p>
+<p>Add that we specify the <a href="https://man7.org/linux/man-pages/man7/capabilities.7.html">capabilities</a>to use so that you can monitor the network interface:</p>
+<pre><code class="language-bash">docker run --rm -it --net=host \
+    --cap-add=net_admin --cap-add=sys_nice \
+    jasonish/suricata:latest -i ens33
+</code></pre>
+<p>I test if I have connection to the server from my attacker machine: </p>
+<p><img src="/images_blog/img_suricata/Pastedimage20210626122657.png" alt=""><br><img src="https://user-images.githubusercontent.com/76759292/127757903-ac04aa33-c54c-4fbe-bab6-35f9dc03445e.png" alt="Pastedimage20210626122657"></p>
+<p>Valid that the service is enabled on the server:</p>
+<p><img src="/images_blog/img_suricata/Pastedimage20210626122805.png" alt=""><br><img src="https://user-images.githubusercontent.com/76759292/127757905-42a14499-6ea5-47ac-803e-1f3d2a847f00.png" alt="Pastedimage20210626122805"></p>
+<h2>Rules</h2>
+<p>Before entering the test to see what rules suricata has we must first enter the container with the following command:</p>
+<pre><code class="language-bash">docker exec -it ID /bin/bash
+</code></pre>
+<p>Let&#39;s go to the route where the rules are:</p>
+<pre><code class="language-bash">cat /var/lib/suricata/rules/suricata.rules
+</code></pre>
+<p>It has 30198 rules, I think it is too few:</p>
+<p><img src="/images_blog/img_suricata/Pastedimage20210626123558.png" alt=""><br><img src="https://user-images.githubusercontent.com/76759292/127757908-9fbff0ab-4f5c-4e9a-bc0f-0e17b0b5dc85.png" alt="Pastedimage20210626123558"></p>
+<h2>Attack DOS</h2>
+<p>Here we see the alerts that the meerkat gives us in the event of a <a href="https://es.wikipedia.org/wiki/Ataque_de_denegaci%C3%B3n_de_servicio">attack</a>:</p>
+<p><img src="/images_blog/img_suricata/Pastedimage20210626124321.png" alt=""><br><img src="https://user-images.githubusercontent.com/76759292/127757912-143e05a5-5ced-4aeb-a441-d1005b1832e0.png" alt="Pastedimage20210626124321"></p>
+<p><img src="/images_blog/img_suricata/Pastedimage20210626124411.png" alt=""><br><img src="https://user-images.githubusercontent.com/76759292/127757917-52977f83-3469-4b8e-ad94-4eaeec4d45be.png" alt="Pastedimage20210626124411"></p>
+<h2>Result</h2>
+<p>The result was as expected, the service was stopped incorrectly:</p>
+<p><img src="/images_blog/img_suricata/Pastedimage20210626124541.png" alt=""><br><img src="https://user-images.githubusercontent.com/76759292/127757926-3a3cb51d-761f-4196-bca4-383bd4263ce2.png" alt="Pastedimage20210626124541"></p>
+<p><img src="/images_blog/img_suricata/Pastedimage20210626124606.png" alt=""><br><img src="https://user-images.githubusercontent.com/76759292/127757927-b2219ea8-39e3-4f15-911c-2aa2251ef558.png" alt="Pastedimage20210626124606"></p>
+<h2>Start service</h2>
+<p>Now we proceed to first stop the container and then restart it:</p>
+<p><img src="/images_blog/img_suricata/Pastedimage20210626125155.png" alt=""><br><img src="https://user-images.githubusercontent.com/76759292/127757931-acce329c-7a8f-451f-a899-5f0e1952af14.png" alt="Pastedimage20210626125155"></p>
+<p><img src="/images_blog/img_suricata/Pastedimage20210626125217.png" alt=""><br><img src="https://user-images.githubusercontent.com/76759292/127757934-6378a1c0-6dd9-4d01-a6d1-44292e494101.png" alt="Pastedimage20210626125217"></p>
+<h2>Statistics</h2>
+<p>Here we can see through the logs a statistic of the total received:</p>
+<p><img src="/images_blog/img_suricata/Pastedimage20210626125327.png" alt=""><br><img src="https://user-images.githubusercontent.com/76759292/127757937-0329191c-917e-4714-a974-79aa82c74fbf.png" alt="Pastedimage20210626125327"></p>
+<h2>Mitigation</h2>
+<p>By means of the logs we can do something interesting and it is that for example if we have the address of where the attacks originated we can take it:</p>
+<p><img src="/images_blog/img_suricata/Pastedimage20210626125650.png" alt=""><br><img src="https://user-images.githubusercontent.com/76759292/127757947-d3ffd550-ca08-4a9b-bd34-931866594f04.png" alt="Pastedimage20210626125650"></p>
+<p>Here I check:</p>
+<p><img src="/images_blog/img_suricata/Pastedimage20210626125634.png" alt=""><br><img src="https://user-images.githubusercontent.com/76759292/127757949-4cf6baa1-ab6b-448e-9af9-83f9b9fa188e.png" alt="Pastedimage20210626125634"></p>
+<h2>Block</h2>
+<ul>
+<li>Form 1</li>
+</ul>
+<p>With <a href="https://firewalld.org/">firewalld</a>:</p>
+<pre><code class="language-bash">firewall-cmd -add-rich-rule=&#39;rule family=ipv4 source address=192.168.204.131 reject&#39; --permanent
+</code></pre>
+<p><img src="/images_blog/img_suricata/Pastedimage20210626130203.png" alt=""><br><img src="https://user-images.githubusercontent.com/76759292/127757955-1330a9c3-b3d2-4a5d-aa7d-b683cb0f02ac.png" alt="Pastedimage20210626130203"></p>
+<ul>
+<li>Form 2</li>
+</ul>
+<p>Use the one I found easiest, you use whichever of the two:</p>
+<p><img src="/images_blog/img_suricata/Pastedimage20210626130725.png" alt=""><br><img src="https://user-images.githubusercontent.com/76759292/127757960-4bf158ac-3ecd-4780-aa73-103715b6d7b4.png" alt="Pastedimage20210626130725"></p>
+<h2>Result</h2>
+<p><img src="/images_blog/img_suricata/Pastedimage20210626131133.png" alt=""><br><img src="" alt="Uploading Pastedimage20210626131133.png…"></p>
+<h2>Opinion on the rules</h2>
+<p>As a recommendation I would say that the default ones are very good, you just have to analyze and edit them a little but if you want to make your own rules you can also do it, first create a backup of the original file and that&#39;s it:</p>
+<p><img src="/images_blog/img_suricata/Pastedimage20210626131505.png" alt=""><br><img src="https://user-images.githubusercontent.com/76759292/127757966-9b479fd3-65a8-4352-8b03-198d1b1abc7c.png" alt="Pastedimage20210626131505"></p>
+<p>Here is a list of rules:</p>
+<ul>
+<li><a href="https://github.com/lrvy/suricata-rules/blob/master/suricata-ids.rules">suricata-rules</a></li>
+</ul>
+<h2>Nmap</h2>
+<p>I do an nmap scan this way because it is a controlled environment:</p>
+<p><img src="/images_blog/img_suricata/Pastedimage20210626133036.png" alt=""><br><img src="https://user-images.githubusercontent.com/76759292/127757972-13af9085-166a-434f-a2d8-7b71e2d13645.png" alt="Pastedimage20210626133036"></p>
+<p>What is reflected in the meerkat (although this can be bypassed, I think it is a good measure against an attacker):</p>
+<p><img src="/images_blog/img_suricata/Pastedimage20210626133108.png" alt=""><br><img src="https://user-images.githubusercontent.com/76759292/127757971-1cc9cf15-0547-4eeb-b158-998bfda78018.png" alt="Pastedimage20210626133108"></p>
+<h2>Joint applications</h2>
+<p>In this part we can implement the honeypot and meerkat together:</p>
+<pre><code class="language-bash"> docker run -d -p 22:2222 cowrie/cowrie
+</code></pre>
+<p>Check:</p>
+<p><img src="/images_blog/img_suricata/Pastedimage20210626133545.png" alt=""><br><img src="https://user-images.githubusercontent.com/76759292/127757975-58203751-0c12-45ab-98b0-b454bca3c50f.png" alt="Pastedimage20210626133545"></p>
+<p>Here we see that even though it is a meerkat honeypot, it is still doing its job</p>
+<p><img src="/images_blog/img_suricata/Pastedimage20210626133749.png" alt=""></p>
+<h2>General Opinion</h2>
+<p>*All this was done in a controlled environment.</p>
+<p>It is worth adding that it would be an excellent option to take for a production environment, in my experience using it you can get more out of it than what you get here. It is possible to make scripts that help with the blocking part.</p>
+<p>There are also other ways of implementation such as on a server as such and not in a container.</p>
+<p>Review PWNED!!!!!</p>
+<p align="center">
+<img src="https://tenor.com/view/timone-lion-king-hula-dance-gif-5602013.gif" width="400" height="400" />
+</p>
+  </div>
+  <div class="tags"><span class="tag">suricata</span>
+<span class="tag">ids/ips</span>
+<span class="tag">Utility</span>
+<span class="tag">docker</span>
+<span class="tag">blueteam</span></div>
+</article>
+<script>
+function switchTheme() { localStorage.setItem('layout','modern'); window.location.href = '../../modern/index.html'; }
+function toggleDM() { var d = document.documentElement; var c = d.getAttribute('data-theme'); var n = (c === 'light') ? 'dark' : 'light'; d.setAttribute('data-theme', n); document.getElementById('dmBtn').textContent = n === 'light' ? 'dark' : 'light'; localStorage.setItem('dm', n); }
+(function(){ var s = localStorage.getItem('dm') || 'dark'; if (s === 'light') { document.documentElement.setAttribute('data-theme','light'); document.getElementById('dmBtn').textContent = 'dark'; } })();
+</script>
+<footer>B3nj1 / 2026</footer>
+</body>
+</html>

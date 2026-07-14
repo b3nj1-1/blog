@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HacktheBox - Paper | b3nj1</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💀</text></svg>">
+  <meta name="description" content="Cybersecurity & networking research, CTF walkthroughs, and mobile pentesting">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark-dimmed.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script>hljs.highlightAll();</script>
+  <meta property="article:published_time" content="2022-06-30">
+</head>
+<body>
+  <div class="container">
+    <nav>
+      <span class="logo">~&gt; <a href="../index.html">b3nj1</a></span>
+      <ul class="nav-links">
+        <li><a href="../index.html">Posts</a></li>
+        <li><a href="../about/index.html">About</a></li>
+        <li><a href="../research/index.html">Research</a></li>
+        <li><a href="https://github.com/b3nj1-1" target="_blank">GitHub</a></li>
+        <li><button class="theme-btn" id="dmBtn" onclick="toggleDM()">light</button></li>
+        <li><button class="theme-btn" onclick="switchTheme()">layout</button></li>
+      </ul>
+    </nav>
+    
+    <article>
+      <div class="post-header">
+        <a href="../index.html" class="back-link">&larr; Back to all posts</a>
+        <h1>HacktheBox - Paper</h1>
+        <div class="meta">
+          <time datetime="2022-06-30">Jun 30, 2022</time>
+          <span class="sep">&#x2022;</span>
+          <span class="cat">Hackthebox</span>
+          <span class="sep">&#x2022;</span>
+          <span>5 tags</span>
+        </div>
+      </div>
+      <div class="post-content">
+        <p>This machine plays a cve that when the machine was released was discovered.</p>
+<hr>
+<h1>Enumeration</h1>
+<h2>Nmap</h2>
+<p>In the scan we obtain 3 ports only:</p>
+<p>22 --&gt; SSH</p>
+<p>80 --&gt; HTTP</p>
+<p>443 ---&gt; HTTPS</p>
+<pre><code class="language-bash"># Nmap 7.91 scan initiated Sat Feb 12 16:31:45 2022 as: nmap -sCV -v -T5 -Pn -oN nmap/scanport.log 10.10.11.143
+Warning: 10.10.11.143 giving up on port because retransmission cap hit (2).
+Nmap scan report for 10.10.11.143
+Host is up (0.065s latency).
+Not shown: 577 filtered ports, 420 closed ports
+PORT    STATE SERVICE  VERSION
+22/tcp  open  ssh      OpenSSH 8.0 (protocol 2.0)
+| ssh-hostkey: 
+|   2048 10:05:ea:50:56:a6:00:cb:1c:9c:93:df:5f:83:e0:64 (RSA)
+|   256 58:8c:82:1c:c6:63:2a:83:87:5c:2f:2b:4f:4d:c3:79 (ECDSA)
+|_  256 31:78:af:d1:3b:c4:2e:9d:60:4e:eb:5d:03:ec:a0:22 (ED25519)
+80/tcp  open  http     Apache httpd 2.4.37 ((centos) OpenSSL/1.1.1k mod_fcgid/2.3.9)
+|_http-generator: HTML Tidy for HTML5 for Linux version 5.7.28
+|_http-server-header: Apache/2.4.37 (centos) OpenSSL/1.1.1k mod_fcgid/2.3.9
+|_http-title: HTTP Server Test Page powered by CentOS
+443/tcp open  ssl/http Apache httpd 2.4.37 ((centos) OpenSSL/1.1.1k mod_fcgid/2.3.9)
+|_http-server-header: Apache/2.4.37 (centos) OpenSSL/1.1.1k mod_fcgid/2.3.9
+|_http-title: 400 Bad Request
+| ssl-cert: Subject: commonName=localhost.localdomain/organizationName=Unspecified/countryName=US
+| Subject Alternative Name: DNS:localhost.localdomain
+| Issuer: commonName=localhost.localdomain/organizationName=Unspecified/countryName=US
+| Public Key type: rsa
+| Public Key bits: 2048
+| Signature Algorithm: sha256WithRSAEncryption
+| Not valid before: 2021-07-03T08:52:34
+| Not valid after:  2022-07-08T10:32:34
+| MD5:   579a 92bd 803c ac47 d49c 5add e44e 4f84
+|_SHA-1: 61a2 301f 9e5c 2603 a643 00b5 e5da 5fd5 c175 f3a9
+|_ssl-date: TLS randomness does not represent time
+| tls-alpn: 
+|_  http/1.1
+
+Read data files from: /usr/bin/../share/nmap
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+# Nmap done at Sat Feb 12 16:34:09 2022 -- 1 IP address (1 host up) scanned in 144.47 seconds
+</code></pre>
+<h2>Tecnology</h2>
+<p>Looking at the technologies involved in the machine I see a domain:</p>
+<ul>
+<li>office.paper</li>
+</ul>
+<pre><code class="language-php">Summary: Email[webmaster@example.com], PoweredBy[CentOS], MetaGenerator[HTML Tidy for HTML5 for Linux version 5.7.28], UncommonHeaders[x-backend-server], HTTPServer[CentOS]
+[Apache/2.4.37 (centos) OpenSSL/1.1.1k mod_fcgid/2.3.9], OpenSSL[1.1.1k], Apache[2.4.37][mod_fcgid/2.3.9], HTML5, X-Backend[office.paper]
+</code></pre>
+<h2>Subdomain</h2>
+<p>We add this to /etc/hosts</p>
+<ul>
+<li>office.paper</li>
+<li>chat.office.paper</li>
+<li>office.htb</li>
+</ul>
+<pre><code class="language-bash">gobuster vhost -u http://office.paper -w ~/Documents/Seclists/Discovery/DNS/subdomains-top1million-110000.txt -z -q
+
+Found: chat.office.paper (Status: 200) [Size: 223163]
+</code></pre>
+<h2>User Potencial</h2>
+<p>By looking at the comments we can perhaps draw out possible users:</p>
+<ul>
+<li>Nick</li>
+<li>prisonmike</li>
+</ul>
+<p>Here is a hint of a content that has not been deleted</p>
+<p><img src="https://user-images.githubusercontent.com/76759292/176797633-12943acf-661c-4073-8791-693872ab06cf.png" alt="wordpress-comment"></p>
+<p>Here we see a vulnerability that allows us to view the draft</p>
+<p><a href="https://wpscan.com/vulnerability/3413b879-785f-4c9f-aa8a-5a4a1d5e0ba2">https://wpscan.com/vulnerability/3413b879-785f-4c9f-aa8a-5a4a1d5e0ba2</a></p>
+<h2>Chat</h2>
+<p>Seeing this we realize that we need a specific url:</p>
+<p><img src="https://user-images.githubusercontent.com/76759292/176797830-53035200-81c8-41fc-aead-c6adba0bd2fd.png" alt="rocket-chat"></p>
+<h2>Vuln</h2>
+<p><a href="http://office.paper/?static=1">http://office.paper/?static=1</a></p>
+<p>Here following how the vulnerability is exploited we would have access to the draft</p>
+<p><img src="https://user-images.githubusercontent.com/76759292/176797942-1a19f6b1-3cea-4f75-83af-2a32657868dc.png" alt="wp-leak"></p>
+<h2>Register</h2>
+<p>Here we already have access to the internal chat</p>
+<p><a href="http://chat.office.paper/register/8qozr226AhkCHZdyY">http://chat.office.paper/register/8qozr226AhkCHZdyY</a></p>
+<p><img src="https://user-images.githubusercontent.com/76759292/176798007-eb8c426a-87a3-4c84-a697-9a93e7de611e.png" alt="channel-general"></p>
+<h2>Bot Testing (Shell Dwight)</h2>
+<p>Testing the bot I realize that I can read files from the server, here I found an interesting file which is .env</p>
+<pre><code class="language-bash">recyclops file ../../../../../home/dwight/hubot/.env
+</code></pre>
+<p><img src="https://user-images.githubusercontent.com/76759292/176798227-953ba717-1eb5-4d52-b4ac-88d9d89f6dd6.png" alt="directory-traversal-1"></p>
+<h1>PrivEsc</h1>
+<p>With this password we found we can use it as the user dwight:</p>
+<pre><code class="language-bash">ssh dwight@10.10.11.143                                                                   
+dwight@10.10.11.143&#39;s password:                                                                    
+Activate the web console with: systemctl enable --now cockpit.socket                               
+                                                                                                   
+Last login: Tue Feb  1 09:14:33 2022 from 10.10.14.23                                              
+[dwight@paper ~]$ id                                                                               
+uid=1004(dwight) gid=1004(dwight) groups=1004(dwight)                                              
+[dwight@paper ~]$ clear                                                                            
+[dwight@paper ~]$ ls                                                                               
+bot_restart.sh  hubot  sales  user.txt
+[dwight@paper ~]$ cat user.txt 
+e5e2ef480b8d49dd2dd1be31c1384812
+[dwight@paper ~]$ 
+</code></pre>
+<p>With linpeas I can see an interesting information which is that it has polkit:</p>
+<p><img src="https://user-images.githubusercontent.com/76759292/176798521-e26a63de-eade-4327-9d1f-e22d28449bb7.png" alt="polkit-linpeas"></p>
+<h2>Python</h2>
+<p>We can use this exploit in <a href="https://github.com/Almorabea/Polkit-exploit/blob/main/CVE-2021-3560.py">Python</a></p>
+<p><img src="https://user-images.githubusercontent.com/76759292/176798695-e6b83006-98aa-4128-9d27-acc66c676911.png" alt="exploit-python"></p>
+<p><img src="https://user-images.githubusercontent.com/76759292/176798707-f0ee3ec1-b44e-4377-bf51-566d553e0cf1.png" alt="root-flag"></p>
+<h2>Bash</h2>
+<p>We can use this exploit in <a href="https://github.com/secnigma/CVE-2021-3560-Polkit-Privilege-Esclation/blob/main/poc.sh">bash</a></p>
+<p><img src="https://user-images.githubusercontent.com/76759292/176798777-16543607-b707-4afd-9bcb-a650c1a99092.png" alt="exploit-run-sh"></p>
+<p>MACHINE PWNED!!!!!</p>
+<p align="center">
+<img src="https://tenor.com/view/typing-petty-fast-cloudy-with-a-chance-of-meatballs-flint-lockwood-gif-4907824.gif" width="300" height="300" />
+</p>
+      </div>
+      <div class="post-footer">
+        <div class="tags">
+          <span class="tag">ctf</span>
+        <span class="tag">linux</span>
+        <span class="tag">Hackthebox</span>
+        <span class="tag">Wordpress</span>
+        <span class="tag">polkit</span>
+        </div>
+      </div>
+    </article>
+    <footer>
+      &copy; 2026 <a href="https://github.com/b3nj1-1">B3nj1</a>. All rights reserved.
+    </footer>
+  </div>
+  <script>
+    function switchTheme() { localStorage.setItem('layout','minimal'); window.location.href = '../../minimal/index.html'; }
+    function toggleDM() { var d = document.documentElement; var c = d.getAttribute('data-theme'); var n = (c === 'light') ? 'dark' : 'light'; d.setAttribute('data-theme', n); document.getElementById('dmBtn').textContent = n === 'light' ? 'dark' : 'light'; localStorage.setItem('dm', n); }
+    (function(){ var s = localStorage.getItem('dm') || 'dark'; if (s === 'light') { document.documentElement.setAttribute('data-theme','light'); document.getElementById('dmBtn').textContent = 'dark'; } })();
+  </script>
+</body>
+</html>

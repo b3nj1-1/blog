@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Food Store From Mobile Hacking Lab | b3nj1</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💀</text></svg>">
+  <meta name="description" content="Cybersecurity & networking research, CTF walkthroughs, and mobile pentesting">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark-dimmed.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script>hljs.highlightAll();</script>
+  <meta property="article:published_time" content="2025-06-09">
+</head>
+<body>
+  <div class="container">
+    <nav>
+      <span class="logo">~&gt; <a href="../index.html">b3nj1</a></span>
+      <ul class="nav-links">
+        <li><a href="../index.html">Posts</a></li>
+        <li><a href="../about/index.html">About</a></li>
+        <li><a href="../research/index.html">Research</a></li>
+        <li><a href="https://github.com/b3nj1-1" target="_blank">GitHub</a></li>
+        <li><button class="theme-btn" id="dmBtn" onclick="toggleDM()">light</button></li>
+        <li><button class="theme-btn" onclick="switchTheme()">layout</button></li>
+      </ul>
+    </nav>
+    
+    <article>
+      <div class="post-header">
+        <a href="../index.html" class="back-link">&larr; Back to all posts</a>
+        <h1>Food Store From Mobile Hacking Lab</h1>
+        <div class="meta">
+          <time datetime="2025-06-09">Jun 9, 2025</time>
+          <span class="sep">&#x2022;</span>
+          <span class="cat">Android</span>
+          <span class="sep">&#x2022;</span>
+          <span>2 tags</span>
+        </div>
+      </div>
+      <div class="post-content">
+        <p>This is a challenge that we have to analysis the code, and in the code we will found an SQLi that will led to a SQL injection. This is my own methodology and the way that I approach these challenges. The idea with this challenge is to convert our user into a Super User.</p>
+<hr>
+<p>Before opening Jadx and starting to analyze the application, I found that the app only lets you register a regular user:</p>
+<img width="545" height="770" alt="image" src="https://github.com/user-attachments/assets/8d1b01a5-f427-42c2-8c88-b40df466a5ab" /><h2>Static Analysis</h2>
+<p>I started looking in the source code to see how the application is adding the input to the database. I used JADX to verify this:</p>
+<img width="975" height="521" alt="image" src="https://github.com/user-attachments/assets/9e33c68a-dfbc-4765-81a9-6b146076fab7" /><p>The way this app works stood out to me. The adduser function is responsible for inserting values into the database when a user signs up. Below is the line the app uses in the background to add a new user to the database:</p>
+<p>String sql = &quot;INSERT INTO users (username, password, address, isPro) VALUES (&#39;&quot; + Username + &quot;&#39;, &#39;&quot; + encodedPassword + &quot;&#39;, &#39;&quot; + encodedAddress + &quot;&#39;, 0)&quot;;</p>
+<p>As we can see, this specific line does not sanitize the input provided by the user, which leads to a SQL Injection (SQLi) vulnerability. Since user input is concatenated directly into the SQL query, an attacker could manipulate the query to access or modify unauthorized data.</p>
+<p>Before attempting any injections, I examined the database using DB Browser for SQLite to understand how the data was being stored. This step helped me confirm the structure of the database and identify where user information was saved, which is important when testing for SQLi vulnerabilities.</p>
+<img width="975" height="756" alt="image" src="https://github.com/user-attachments/assets/df5ddbb4-6983-40ff-a906-fdd9e2c16d59" /><p>I first tried introducing the input in plaintext, but the app immediately crashed. This meant that when the app attempted to read the data, it caused an error and shut down. While this might seem like a failure, it was actually a good sign—it indicated that the SQL manipulation was successful, but the app couldn’t process the input because it wasn’t encoded.</p>
+<p>My next idea was to escalate privileges by using the following query:</p>
+<p>UPDATE users SET isPro = 1;</p>
+<p>In this database, if isPro = 1, the user is treated as a Pro User. If isPro = 0, the user is considered a Regular User. Gaining Pro status would effectively give me additional access or features.</p>
+<p>The issue, however, is that the vulnerable code only allows INSERT operations, since the query gets executed exactly as written inside the INSERT INTO statement. This means I can’t directly run an UPDATE unless I can break out of the original INSERT query.</p>
+<p>At this point, I went back to analyze why plaintext input didn’t work in the first place. The answer was clear: I had completely bypassed the app’s logic. Normally, the app encodes the password and address fields in Base64 before inserting them into the database. Since my injected payload didn’t follow this rule, the application couldn’t process it correctly.</p>
+<p>With this knowledge, my next approach was to insert the payload while making sure the password and address values were Base64-encoded. This way, I could stay consistent with the app’s expected logic while still attempting to inject SQL into the query.</p>
+<img width="900" height="634" alt="image" src="https://github.com/user-attachments/assets/29056c77-46d9-432c-9bc8-9465b68159c9" /><p><code>z</code>&#39;, &#39;YQ==&#39;, &#39;Yg==&#39;, 1);--`</p>
+<p>Finally, I got access as a ProUser:</p>
+<img width="665" height="1350" alt="image" src="https://github.com/user-attachments/assets/25f2e607-e3f0-43f1-b79c-57e7d7463865" />
+      </div>
+      <div class="post-footer">
+        <div class="tags">
+          <span class="tag">Android</span>
+        <span class="tag">SQLi</span>
+        </div>
+      </div>
+    </article>
+    <footer>
+      &copy; 2026 <a href="https://github.com/b3nj1-1">B3nj1</a>. All rights reserved.
+    </footer>
+  </div>
+  <script>
+    function switchTheme() { localStorage.setItem('layout','minimal'); window.location.href = '../../minimal/index.html'; }
+    function toggleDM() { var d = document.documentElement; var c = d.getAttribute('data-theme'); var n = (c === 'light') ? 'dark' : 'light'; d.setAttribute('data-theme', n); document.getElementById('dmBtn').textContent = n === 'light' ? 'dark' : 'light'; localStorage.setItem('dm', n); }
+    (function(){ var s = localStorage.getItem('dm') || 'dark'; if (s === 'light') { document.documentElement.setAttribute('data-theme','light'); document.getElementById('dmBtn').textContent = 'dark'; } })();
+  </script>
+</body>
+</html>

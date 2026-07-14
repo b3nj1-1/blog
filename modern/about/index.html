@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About | b3nj1</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💀</text></svg>">
+  <meta name="description" content="Cybersecurity & networking research, CTF walkthroughs, and mobile pentesting">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark-dimmed.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script>hljs.highlightAll();</script>
+  
+</head>
+<body>
+  <div class="container">
+    <nav>
+      <span class="logo">~&gt; <a href="../index.html">b3nj1</a></span>
+      <ul class="nav-links">
+        <li><a href="../index.html">Posts</a></li>
+        <li><a href="../about/index.html">About</a></li>
+        <li><a href="../research/index.html">Research</a></li>
+        <li><a href="https://github.com/b3nj1-1" target="_blank">GitHub</a></li>
+        <li><button class="theme-btn" id="dmBtn" onclick="toggleDM()">light</button></li>
+        <li><button class="theme-btn" onclick="switchTheme()">layout</button></li>
+      </ul>
+    </nav>
+    
+    <div class="about-content">
+      <h1>About Me</h1>
+      <p>I'm a cybersecurity and networking professional interested in offensive security. I have gained a strong understanding of cybersecurity best practices and technologies and expertise in network design, implementation, and maintenance. I'm always looking for ways to learn and grow, and I am particularly interested in exploring and mastering the tools and techniques used in offensive security.</p>
+      <p>In my free time, I enjoy staying up-to-date on the latest trends and techniques in these fields through online courses and professional development opportunities.</p>
+
+      <h2 style="color: var(--accent-dim); margin-top: 32px;">Certifications</h2>
+      <ul>
+        <li>CCNA R&S: Scaling Networks</li>
+        <li>CompTIA Security+</li>
+        <li>Certified Azure Red Team Professional (CARTP)</li>
+        <li>Certified Red Team Operator (CRTO)</li>
+        <li>Certified Mobile Pentester (CMPen)</li>
+        <li>Mobile Application Penetration Testing</li>
+        <li>Practical Malware Analysis & Triage</li>
+      </ul>
+
+      <h2 style="color: var(--accent-dim); margin-top: 32px;">Social Media</h2>
+      <div class="social-links">
+        <a href="https://github.com/b3nj1-1/" target="_blank">&#x1f5a5; GitHub</a>
+        <a href="https://twitter.com/b3nj1_1" target="_blank">&#x1f426; Twitter</a>
+        <a href="https://www.hackthebox.eu/home/users/profile/257310" target="_blank">&#x1f3e1; HackTheBox</a>
+        <a href="https://bmc.link/0xb3nj1" target="_blank">&#x2615; Buy me a coffee</a>
+        <a href="mailto:work@b3nj1.net" target="_blank">&#x2709; Email</a>
+      </div>
+    </div>
+    <footer>
+      &copy; 2026 <a href="https://github.com/b3nj1-1">B3nj1</a>. All rights reserved.
+    </footer>
+  </div>
+  <script>
+    function switchTheme() { localStorage.setItem('layout','minimal'); window.location.href = '../../minimal/index.html'; }
+    function toggleDM() { var d = document.documentElement; var c = d.getAttribute('data-theme'); var n = (c === 'light') ? 'dark' : 'light'; d.setAttribute('data-theme', n); document.getElementById('dmBtn').textContent = n === 'light' ? 'dark' : 'light'; localStorage.setItem('dm', n); }
+    (function(){ var s = localStorage.getItem('dm') || 'dark'; if (s === 'light') { document.documentElement.setAttribute('data-theme','light'); document.getElementById('dmBtn').textContent = 'dark'; } })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>about — b3nj1</title>
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark-dimmed.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="logo">b3nj1</a>
+  <div class="links">
+    <a href="index.html">index</a>
+    <a href="about.html">about</a>
+    <a href="research/index.html">research</a>
+    <button class="switch-btn" id="dmBtn" onclick="toggleDM()">light</button>
+    <button class="switch-btn" onclick="switchTheme()">layout</button>
+  </div>
+</nav>
+
+<h1>about</h1>
+<p>Cybersecurity and networking professional. Offensive security, CTF writeups, mobile pentesting.</p>
+<h2>certifications</h2>
+<ul>
+  <li>CCNA R&S: Scaling Networks</li>
+  <li>CompTIA Security+</li>
+  <li>CARTP</li>
+  <li>CRTO</li>
+  <li>CMPen</li>
+</ul>
+<h2>links</h2>
+<ul>
+  <li><a href="https://github.com/b3nj1-1">github</a></li>
+  <li><a href="https://twitter.com/b3nj1_1">twitter</a></li>
+  <li><a href="https://www.hackthebox.eu/home/users/profile/257310">hackthebox</a></li>
+</ul>
+<script>
+function switchTheme() { localStorage.setItem('layout','modern'); window.location.href = '../modern/index.html'; }
+function toggleDM() { var d = document.documentElement; var c = d.getAttribute('data-theme'); var n = (c === 'light') ? 'dark' : 'light'; d.setAttribute('data-theme', n); document.getElementById('dmBtn').textContent = n === 'light' ? 'dark' : 'light'; localStorage.setItem('dm', n); }
+(function(){ var s = localStorage.getItem('dm') || 'dark'; if (s === 'light') { document.documentElement.setAttribute('data-theme','light'); document.getElementById('dmBtn').textContent = 'dark'; } })();
+</script>
+<footer>B3nj1 / 2026</footer>
+</body>
+</html>

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sherlogs — b3nj1</title>
+<link rel="stylesheet" href="../style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark-dimmed.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+</head>
+<body>
+<nav>
+  <a href="../index.html" class="logo">b3nj1</a>
+  <div class="links">
+    <a href="../index.html">index</a>
+    <a href="../about.html">about</a>
+    <a href="../research/index.html">research</a>
+    <button class="switch-btn" id="dmBtn" onclick="toggleDM()">light</button>
+    <button class="switch-btn" onclick="switchTheme()">layout</button>
+  </div>
+</nav>
+
+<article>
+  <h1>Sherlogs</h1>
+  <div class="meta">May 1, 2021 / Scripting</div>
+  <div class="body">
+    <p><em>Simplicity is the key</em>...</p>
+<hr>
+<p>It is a simple bash script that seeks to do the task of viewing the logs of a centos server in an easy way, there are many tools to do the same but the idea of this is to serve as a guide for other distros.</p>
+<p>This script does not use dependencies or anything from third parties, its use is relatively easy and its adaptability is very easy. It can become an excellent weapon for the good administration and monitoring of the systems. </p>
+<h2>Demo</h2>
+<h3>Case 1</h3>
+<p>Suppose we have an http service running and suddenly the service is down or slower than it should normally run, to find out what happens we must check the logs to see what happens but with sherlogs we can do it faster.</p>
+<p><img src="/images_blog/img_sherlogs/Pastedimage20210501102457.png" alt=""><br><img src="https://user-images.githubusercontent.com/76759292/127757572-f71c120c-6f40-4ad0-a644-49b4012e7f0e.png" alt="Pastedimage20210501102457"></p>
+<p><em>Utility performance</em></p>
+<p>La primera condicion es que seamos root sino pasaria esto con el script:</p>
+<p><img src="/images_blog/img_sherlogs/Pastedimage20210501103402.png" alt=""><br><img src="https://user-images.githubusercontent.com/76759292/127757577-93fe5092-5bf8-433e-ac1b-ca0153d0ca37.png" alt="Pastedimage20210501103402"></p>
+<p>The first condition is that we must be root, otherwise this will happen with the script:</p>
+<p><img src="/images_blog/img_sherlogs/Pastedimage20210501103548.png" alt=""><br><img src="https://user-images.githubusercontent.com/76759292/127757582-2e10f041-cfe2-460f-b9f3-41306de1c349.png" alt="Pastedimage20210501103548"></p>
+<p>I&#39;m running it in a lab but it can also be done in a real way because the script filters the logs to not extract them all, you can modify the amount of lines you want it to extract.</p>
+<p>As the script is executed by root for the other users it would not be visible so what I have done is to change the permissions of the tablet.</p>
+<p><img src="/images_blog/img_sherlogs/Pastedimage20210501103937.png" alt=""><br> <img src="https://user-images.githubusercontent.com/76759292/127757585-0ecd5052-1adb-4479-8db6-4ef51c0c648d.png" alt="Pastedimage20210501103937"></p>
+<p><em>Read logs</em><br><img src="/images_blog/img_sherlogs/Pastedimage20210501104110.png" alt=""><br><img src="https://user-images.githubusercontent.com/76759292/127757590-84b5be20-5cf7-4cf3-840c-0b4a43bbe631.png" alt="Pastedimage20210501104110"></p>
+<p>The idea would be that we have a way to see all the logs grouped together. It should be noted that the script is a guide so you can adapt and edit this script as you see fit.</p>
+<h3>Case 2</h3>
+<p>Let&#39;s suppose that our server can be configured from ssh, the idea would be to know which ip addresses can connect and which have failed to block the ip or take other measures.</p>
+<p>For this case I will create a user and assign a not so robust passwd to it</p>
+<pre><code> jusepe
+ password1
+</code></pre>
+<p><img src="/images_blog/img_sherlogs/Pastedimage20210501110639.png" alt=""><br><img src="https://user-images.githubusercontent.com/76759292/127757596-87998fc2-edd1-458a-a45f-aae85380b511.png" alt="Pastedimage20210501110639"></p>
+<p>Everything ready, we start with case 2:</p>
+<p>The idea is that two friend will try to enter the server but I have not given him the pass nor the ssh user, then he will use what is known as brute force against my server, I will wait a while for him to try everything and I will show the result.</p>
+<p><img src="/images_blog/img_sherlogs/Pastedimage20210501113457.png" alt=""><br><img src="https://user-images.githubusercontent.com/76759292/127757598-8eaadb62-e184-4c0f-893a-0219d214e1b8.png" alt="Pastedimage20210501113457"></p>
+<p><img src="/images_blog/img_sherlogs/Pastedimage20210501121200.png" alt=""><br><img src="https://user-images.githubusercontent.com/76759292/127757605-1cc14ada-e23a-470b-a4ea-d14fa63b32e6.png" alt="Pastedimage20210501121200"></p>
+<p>Here I have adapted the script to widen the display spectrum:</p>
+<p><img src="/images_blog/img_sherlogs/Pastedimage20210501113949.png" alt=""><br><img src="https://user-images.githubusercontent.com/76759292/127757611-08b08fa1-c237-4911-bc7c-83baf3cd7fa6.png" alt="Pastedimage20210501113949"></p>
+<p>After several minutes he was able to enter the server with a brute force attack:</p>
+<p><img src="/images_blog/img_sherlogs/Pastedimage20210501121849.png" alt=""><br><img src="https://user-images.githubusercontent.com/76759292/127757618-d3e65a29-4456-485e-b159-89ef1022bc33.png" alt="Pastedimage20210501121849"></p>
+<p><img src="/images_blog/img_sherlogs/Pastedimage20210501123028.png" alt=""><br><img src="https://user-images.githubusercontent.com/76759292/127757622-09e4716c-f8c2-490c-b47a-1c1348e89205.png" alt="Pastedimage20210501123028"></p>
+<p><em>Now we are going to read the logs</em>.<br>Here we can see how the user jusepe logged in several times to the computer, this raises suspicions</p>
+<p><img src="/images_blog/img_sherlogs/Pastedimage20210501123058.png" alt=""><br><img src="https://user-images.githubusercontent.com/76759292/127757625-91026585-1efb-4a1f-ae25-4397986cdd21.png" alt="Pastedimage20210501123058"></p>
+<p>Now we see how it tried to log in with an invalid user, then we can conclude that we are doing a brute force attack. </p>
+<p><img src="/images_blog/img_sherlogs/Pastedimage20210501123236.png" alt=""><br><img src="https://user-images.githubusercontent.com/76759292/127757627-56543747-abeb-4301-83a6-753175f61871.png" alt="Pastedimage20210501123236"></p>
+<h2>Recommendation</h2>
+<ul>
+<li><p>The recommendation is to block the account after recurring failed attempts</p>
+</li>
+<li><p>Another one is to disable the root user through SSH, although in this case it was not seen.</p>
+</li>
+</ul>
+<h2>Conclusion</h2>
+<p>This is a simple utility that can be of help in different cases.</p>
+<p> *This utility was only tested on centOS 8.</p>
+<h2>Credits</h2>
+<p><a href="https://twitter.com/Eriik451">Eriik451</a><br><a href="https://twitter.com/0r1g3n3s">0r1g3n3s</a></p>
+<h3><a href="https://github.com/b3nj1-1/sherlogs">Sherlogs</a></h3>
+
+  </div>
+  <div class="tags"><span class="tag">Scripting</span></div>
+</article>
+<script>
+function switchTheme() { localStorage.setItem('layout','modern'); window.location.href = '../../modern/index.html'; }
+function toggleDM() { var d = document.documentElement; var c = d.getAttribute('data-theme'); var n = (c === 'light') ? 'dark' : 'light'; d.setAttribute('data-theme', n); document.getElementById('dmBtn').textContent = n === 'light' ? 'dark' : 'light'; localStorage.setItem('dm', n); }
+(function(){ var s = localStorage.getItem('dm') || 'dark'; if (s === 'light') { document.documentElement.setAttribute('data-theme','light'); document.getElementById('dmBtn').textContent = 'dark'; } })();
+</script>
+<footer>B3nj1 / 2026</footer>
+</body>
+</html>

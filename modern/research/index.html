@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Research | b3nj1</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💀</text></svg>">
+  <meta name="description" content="Cybersecurity & networking research, CTF walkthroughs, and mobile pentesting">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark-dimmed.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script>hljs.highlightAll();</script>
+  
+</head>
+<body>
+  <div class="container">
+    <nav>
+      <span class="logo">~&gt; <a href="../index.html">b3nj1</a></span>
+      <ul class="nav-links">
+        <li><a href="../index.html">Posts</a></li>
+        <li><a href="../about/index.html">About</a></li>
+        <li><a href="../research/index.html">Research</a></li>
+        <li><a href="https://github.com/b3nj1-1" target="_blank">GitHub</a></li>
+        <li><button class="theme-btn" id="dmBtn" onclick="toggleDM()">light</button></li>
+        <li><button class="theme-btn" onclick="switchTheme()">layout</button></li>
+      </ul>
+    </nav>
+    
+    <section class="hero">
+      <p class="tagline">Original research — honeypots, IDS/IPS, hardware, and blue-team tools</p>
+    </section>
+    <div class="posts-list">
+      <a href="../posts/upgrade-bus-pirate.html" class="post-card">
+        <div class="post-meta">
+          <span class="date">Aug 18, 2023</span>
+          <span class="category">Hardware</span>
+        </div>
+        <h2>Upgrade Bus pirate</h2>
+        <p>The Bus Pirate is an open-source hacker multi-tool that talks to electronic stuff. It's got a bunch of features an intrepid hacker might need to prototype their next project. This ...</p>
+        <div class="post-tags"><span class="tag">Hardware</span></div>
+      </a>
+
+      <a href="../posts/business-continuity-management.html" class="post-card">
+        <div class="post-meta">
+          <span class="date">Oct 12, 2021</span>
+          <span class="category">BCM</span>
+        </div>
+        <h2>Business Continuity Management</h2>
+        <p>This is my point of view on what I understand by continuity</p>
+        <div class="post-tags"><span class="tag">Writing</span></div>
+      </a>
+
+      <a href="../posts/suricata.html" class="post-card">
+        <div class="post-meta">
+          <span class="date">Jul 1, 2021</span>
+          <span class="category">Research</span>
+        </div>
+        <h2>Suricata</h2>
+        <p>Suricata is a scalable tool. This security monitor makes use of multi-threading functions so that just by running in one instance the monitor will balance its load among all availa...</p>
+        <div class="post-tags"><span class="tag">suricata</span><span class="tag">ids/ips</span><span class="tag">Utility</span><span class="tag">docker</span><span class="tag">blueteam</span></div>
+      </a>
+
+      <a href="../posts/cowrie.html" class="post-card">
+        <div class="post-meta">
+          <span class="date">Jun 16, 2021</span>
+          <span class="category">Research</span>
+        </div>
+        <h2>Cowrie</h2>
+        <p>With a honeypot we can collect many indicators that we can use later on</p>
+        <div class="post-tags"><span class="tag">cowrie</span><span class="tag">honeypot</span><span class="tag">Ubuntu</span><span class="tag">blueteam</span><span class="tag">Docker</span></div>
+      </a></div>
+    <footer>
+      &copy; 2026 <a href="https://github.com/b3nj1-1">B3nj1</a>. All rights reserved.
+    </footer>
+  </div>
+  <script>
+    function switchTheme() { localStorage.setItem('layout','minimal'); window.location.href = '../../minimal/index.html'; }
+    function toggleDM() { var d = document.documentElement; var c = d.getAttribute('data-theme'); var n = (c === 'light') ? 'dark' : 'light'; d.setAttribute('data-theme', n); document.getElementById('dmBtn').textContent = n === 'light' ? 'dark' : 'light'; localStorage.setItem('dm', n); }
+    (function(){ var s = localStorage.getItem('dm') || 'dark'; if (s === 'light') { document.documentElement.setAttribute('data-theme','light'); document.getElementById('dmBtn').textContent = 'dark'; } })();
+  </script>
+</body>
+</html>

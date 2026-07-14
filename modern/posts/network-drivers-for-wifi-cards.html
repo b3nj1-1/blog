@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Network drivers for wifi cards | b3nj1</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💀</text></svg>">
+  <meta name="description" content="Cybersecurity & networking research, CTF walkthroughs, and mobile pentesting">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark-dimmed.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script>hljs.highlightAll();</script>
+  <meta property="article:published_time" content="2022-01-17">
+</head>
+<body>
+  <div class="container">
+    <nav>
+      <span class="logo">~&gt; <a href="../index.html">b3nj1</a></span>
+      <ul class="nav-links">
+        <li><a href="../index.html">Posts</a></li>
+        <li><a href="../about/index.html">About</a></li>
+        <li><a href="../research/index.html">Research</a></li>
+        <li><a href="https://github.com/b3nj1-1" target="_blank">GitHub</a></li>
+        <li><button class="theme-btn" id="dmBtn" onclick="toggleDM()">light</button></li>
+        <li><button class="theme-btn" onclick="switchTheme()">layout</button></li>
+      </ul>
+    </nav>
+    
+    <article>
+      <div class="post-header">
+        <a href="../index.html" class="back-link">&larr; Back to all posts</a>
+        <h1>Network drivers for wifi cards</h1>
+        <div class="meta">
+          <time datetime="2022-01-17">Jan 17, 2022</time>
+          <span class="sep">&#x2022;</span>
+          <span class="cat">Doubts</span>
+          <span class="sep">&#x2022;</span>
+          <span>2 tags</span>
+        </div>
+      </div>
+      <div class="post-content">
+        <p>In my case it gave me a lot of problems and that&#39;s why I&#39;m making this post so that if someone finds it difficult to see this. Solution to the installation of network drivers for wifi cards</p>
+<hr>
+<h1>Install Driver Alfa AWUS1900</h1>
+<p align="center"><img src="https://user-images.githubusercontent.com/76759292/149857391-794a7308-a0b8-478d-8995-77273058cd26.png" /></p><p>First we must install the headers, this is done manually (this is because the normal way does not work), here is the link where you can download them <a href="https://http.kali.org/kali/pool/main/l/linux/">Resource</a></p>
+<p>The packages we need will depend on the version, in my case I have the:</p>
+<p><em>5.10.0-kali9-amd64</em></p>
+<p>You can see the version with the command:</p>
+<pre><code class="language-bash">uname -r
+</code></pre>
+<p>The packages are:</p>
+<ul>
+<li>linux-headers-5.10.0-kali9-amd64_5.10.46-1kali1_amd64.deb</li>
+<li>linux-headers-5.10.0-kali9-common_5.10.46-1kali1_all.deb</li>
+<li>linux-kbuild-5.10_5.10.46-4kali1_amd64.deb</li>
+</ul>
+<p>We install them with the command: </p>
+<pre><code class="language-bash">dpkg -i &lt;Paquete&gt;
+</code></pre>
+<p>The order of the packages is:</p>
+<p>1 - linux-headers-5.10.0-kali9-common_5.10.46-1kali1_all.deb</p>
+<p>2 - inux-kbuild-5.10_5.10.46-4kali1_amd64.deb</p>
+<p>3 - linux-headers-5.10.0-kali9-amd64_5.10.46-1kali1_amd64.deb</p>
+<p>To download the packages we can use wget or directly from the web.</p>
+<p><img src="https://user-images.githubusercontent.com/76759292/149856708-4aa809c3-3fb6-4295-aabc-67a677d27c17.png" alt="image"></p>
+<p>This will take some time, so be patient on this part. I make this article because it gave me a lot of problems when installing this, then I found a solution that was very useful.</p>
+<p>I hope you find it useful.</p>
+<p><img src="https://user-images.githubusercontent.com/76759292/149857736-8b5dbce6-eac1-4af5-a54f-958447ff2089.png" alt="image"></p>
+<p align="center">
+<img src="https://tenor.com/view/how-to-basic-how-to-basic-egg-egg-computer-compaq-gif-22915340.gif" width="250" height="250" />
+</p><h2>Credits</h2>
+<p><a href="https://mobile.twitter.com/eriik451">eriik451</a></p>
+
+      </div>
+      <div class="post-footer">
+        <div class="tags">
+          <span class="tag">utility</span>
+        <span class="tag">wifi</span>
+        </div>
+      </div>
+    </article>
+    <footer>
+      &copy; 2026 <a href="https://github.com/b3nj1-1">B3nj1</a>. All rights reserved.
+    </footer>
+  </div>
+  <script>
+    function switchTheme() { localStorage.setItem('layout','minimal'); window.location.href = '../../minimal/index.html'; }
+    function toggleDM() { var d = document.documentElement; var c = d.getAttribute('data-theme'); var n = (c === 'light') ? 'dark' : 'light'; d.setAttribute('data-theme', n); document.getElementById('dmBtn').textContent = n === 'light' ? 'dark' : 'light'; localStorage.setItem('dm', n); }
+    (function(){ var s = localStorage.getItem('dm') || 'dark'; if (s === 'light') { document.documentElement.setAttribute('data-theme','light'); document.getElementById('dmBtn').textContent = 'dark'; } })();
+  </script>
+</body>
+</html>

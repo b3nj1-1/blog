@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>index — b3nj1</title>
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark-dimmed.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="logo">b3nj1</a>
+  <div class="links">
+    <a href="index.html">index</a>
+    <a href="about.html">about</a>
+    <a href="research/index.html">research</a>
+    <button class="switch-btn" id="dmBtn" onclick="toggleDM()">light</button>
+    <button class="switch-btn" onclick="switchTheme()">layout</button>
+  </div>
+</nav>
+
+<h1>b3nj1</h1>
+<p class="desc">cybersecurity & networking</p>
+<input type="text" id="ms" placeholder="search posts..." style="max-width:640px;margin:0 auto 24px;display:block;width:100%;padding:8px 12px;background:var(--bg-alt);border:1px solid var(--border2);border-radius:4px;color:var(--text);font-family:inherit;font-size:0.88rem;outline:none" />
+<div class="posts" id="mposts">
+<a href="posts/food-store-from-mobile-hacking-lab.html" class="post">
+  <span class="date">Jun 9, 2025</span>
+  <span class="title">Food Store From Mobile Hacking Lab</span>
+  <span class="excerpt">This is a challenge that we have to analysis the code, and in the code we will found an SQLi that will led to a SQL injection. This is my own methodology and the way that I approach these challenges. ...</span>
+</a>
+
+<a href="posts/unveiling-the-secrets-of-mobile-penetration-testing-i-drozer.html" class="post">
+  <span class="date">Sep 18, 2023</span>
+  <span class="title">Unveiling the Secrets of Mobile Penetration Testing I (Drozer)</span>
+  <span class="excerpt">Unveiling the Secrets of Mobile Penetration Testing: Where to Begin</span>
+</a>
+
+<a href="posts/upgrade-bus-pirate.html" class="post">
+  <span class="date">Aug 18, 2023</span>
+  <span class="title">Upgrade Bus pirate</span>
+  <span class="excerpt">The Bus Pirate is an open-source hacker multi-tool that talks to electronic stuff. It's got a bunch of features an intrepid hacker might need to prototype their next project. This manual is an effort ...</span>
+</a>
+
+<a href="posts/windows-server-core-i.html" class="post">
+  <span class="date">Sep 20, 2022</span>
+  <span class="title">Windows Server Core I</span>
+  <span class="excerpt">Advantages and disadvantages of using windows server core</span>
+</a>
+
+<a href="posts/hackthebox-paper.html" class="post">
+  <span class="date">Jun 30, 2022</span>
+  <span class="title">HacktheBox - Paper</span>
+  <span class="excerpt">This machine plays a cve that when the machine was released was discovered.</span>
+</a>
+
+<a href="posts/mobile-pentesting-i.html" class="post">
+  <span class="date">Mar 3, 2022</span>
+  <span class="title">Mobile Pentesting I</span>
+  <span class="excerpt">In this post you will see the different vulnerabilities that android devices can face. (OWASP Mobile Top 10)</span>
+</a>
+
+<a href="posts/network-drivers-for-wifi-cards.html" class="post">
+  <span class="date">Jan 17, 2022</span>
+  <span class="title">Network drivers for wifi cards</span>
+  <span class="excerpt">In my case it gave me a lot of problems and that's why I'm making this post so that if someone finds it difficult to see this. Solution to the installation of network drivers for wifi cards</span>
+</a>
+
+<a href="posts/business-continuity-management.html" class="post">
+  <span class="date">Oct 12, 2021</span>
+  <span class="title">Business Continuity Management</span>
+  <span class="excerpt">This is my point of view on what I understand by continuity</span>
+</a>
+
+<a href="posts/active-directory-i.html" class="post">
+  <span class="date">Aug 29, 2021</span>
+  <span class="title">Active Directory I</span>
+  <span class="excerpt">In this article I use a basic methodology to breach an Active Directory, this article will be the first of a saga that will be oriented to AD walkthroughs.</span>
+</a>
+
+<a href="posts/hackthebox-thenotebook.html" class="post">
+  <span class="date">Jul 31, 2021</span>
+  <span class="title">HacktheBox - TheNotebook</span>
+  <span class="excerpt">It's a machine that I really liked the way it intruded and climbed.</span>
+</a>
+
+<a href="posts/suricata.html" class="post">
+  <span class="date">Jul 1, 2021</span>
+  <span class="title">Suricata</span>
+  <span class="excerpt">Suricata is a scalable tool. This security monitor makes use of multi-threading functions so that just by running in one instance the monitor will balance its load among all available processors, even...</span>
+</a>
+
+<a href="posts/cowrie.html" class="post">
+  <span class="date">Jun 16, 2021</span>
+  <span class="title">Cowrie</span>
+  <span class="excerpt">With a honeypot we can collect many indicators that we can use later on</span>
+</a>
+
+<a href="posts/hackthebox-tenet.html" class="post">
+  <span class="date">Jun 11, 2021</span>
+  <span class="title">HacktheBox - Tenet</span>
+  <span class="excerpt">It is an excellent machine to practice deserialization in PHP.</span>
+</a>
+
+<a href="posts/tryhackme-convertmyvideo.html" class="post">
+  <span class="date">May 26, 2021</span>
+  <span class="title">TryHackMe - Convertmyvideo</span>
+  <span class="excerpt">It is a linux machine that allows us to exploit a vulnerability found in the OWASP Top 10 (2017).</span>
+</a>
+
+<a href="posts/hackthebox-ready.html" class="post">
+  <span class="date">May 14, 2021</span>
+  <span class="title">HacktheBox - Ready</span>
+  <span class="excerpt">This time it is an abuse of a CVE that is present in a version of Gitlab.</span>
+</a>
+
+<a href="posts/tryhackme-startup.html" class="post">
+  <span class="date">Jul 12, 2026</span>
+  <span class="title">TryHackMe - Startup</span>
+  <span class="excerpt">It is a linux machine that allows us to review some basic concepts.</span>
+</a>
+
+<a href="posts/tryhackme-relevant.html" class="post">
+  <span class="date">May 14, 2021</span>
+  <span class="title">TryHackMe - Relevant</span>
+  <span class="excerpt">It is an interesting windows machine in the initial part and in the climbing that can present a challenge.</span>
+</a>
+
+<a href="posts/sherlogs.html" class="post">
+  <span class="date">May 1, 2021</span>
+  <span class="title">Sherlogs</span>
+  <span class="excerpt">It is a simple bash script that seeks to do the task of viewing the logs of a centos server in an easy way, there are many tools to do the same but the idea of this is to serve as a guide for other di...</span>
+</a>
+</div>
+<script>
+var si=[];fetch('search-index.json').then(function(r){return r.json()}).then(function(d){si=d})['catch'](function(){});
+document.getElementById('ms').addEventListener('input',function(){
+  var q=this.value.trim().toLowerCase(),list=document.getElementById('mposts'),items=list.querySelectorAll('.post');
+  items.forEach(function(c){
+    var t=c.querySelector('.title').textContent.toLowerCase(),e=c.querySelector('.excerpt').textContent.toLowerCase(),slug=c.getAttribute('href');
+    var ok=!q||t.indexOf(q)!==-1||e.indexOf(q)!==-1;
+    if(!ok&&q){var idx=si.find(function(x){return slug.indexOf(x.slug)!==-1});if(idx&&idx.text.toLowerCase().indexOf(q)!==-1)ok=true;}
+    c.style.display=ok?'block':'none';
+  });
+});
+</script>
+<script>
+function switchTheme() { localStorage.setItem('layout','modern'); window.location.href = '../modern/index.html'; }
+function toggleDM() { var d = document.documentElement; var c = d.getAttribute('data-theme'); var n = (c === 'light') ? 'dark' : 'light'; d.setAttribute('data-theme', n); document.getElementById('dmBtn').textContent = n === 'light' ? 'dark' : 'light'; localStorage.setItem('dm', n); }
+(function(){ var s = localStorage.getItem('dm') || 'dark'; if (s === 'light') { document.documentElement.setAttribute('data-theme','light'); document.getElementById('dmBtn').textContent = 'dark'; } })();
+</script>
+<footer>B3nj1 / 2026</footer>
+</body>
+</html>

